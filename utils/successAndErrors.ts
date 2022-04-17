@@ -1,4 +1,4 @@
-import { extend } from 'lodash';
+import { extend, isEmpty } from 'lodash';
 
 export default {
     BadRequest: {
@@ -54,41 +54,41 @@ export default {
             message: 'You do not have permission to consume this resource!'
         }
     ),
-    
+
     // REST
 
-    addFailure() {
+    addFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: 'Item WAS NOT added'
+            message: `${entity} WAS NOT added`
         });
     },
-    deleteFailure() {
+    deleteFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: 'Item WAS NOT deleted'
+            message: `${entity}  WAS NOT deleted`
         });
     },
 
-    updateFailure() {
+    updateFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: 'Item WAS NOT updated'
+            message: `${entity} WAS NOT updated`
         });
     },
 
-    addSuccess() {
+    addSuccess(entity: string = 'Data') {
         return extend({}, this.Success, {
-            message: 'Item added successfully'
+            message: `${entity} added successfully`
         });
     },
 
-    deleteSuccess() {
+    deleteSuccess(entity: string = 'Data') {
         return extend({}, this.Success, {
-            message: 'Item deleted successfully'
+            message: `${entity} deleted successfully`
         });
     },
 
-    updateSuccess() {
+    updateSuccess(entity: string = 'Data') {
         return extend({}, this.Success, {
-            message: 'Item updated successfully'
+            message: `${entity} updated successfully`
         });
     },
 

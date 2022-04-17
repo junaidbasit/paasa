@@ -4,6 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node src/index.ts",
+    "start:dev": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prisma:seed": "prisma db seed",
+    "prisma:reset": "prisma migrate reset --force",
+    "prisma:devmigrate": "prisma migrate dev --schema=./prisma/schema.prisma",
+    "prisma:prodmigrate": "prisma db push --accept-data-loss --force-reset",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
