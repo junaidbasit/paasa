@@ -23,6 +23,7 @@ model Vehicle {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
+  seatingCapacity Int
   category    Category @relation(fields: [vehicleId], references: [id])
   vehicleId   String   @db.ObjectId
   createdAt   DateTime @default(now())
