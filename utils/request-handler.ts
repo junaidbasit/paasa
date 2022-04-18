@@ -1,6 +1,10 @@
 import _ from "lodash";
 import { Response, Request } from "express";
 
+const checkDataExistOrNot = (data: any, message?: string) => {
+    if (_.isEmpty(data)) throwError(message ?? 'Please provide complete Data', 404);
+}
+
 const throwError = (errorMessage: string, status?: number) => {
     throw { message: errorMessage, status };
 };
@@ -33,5 +37,6 @@ const sendError = (res: Response, error: any) => {
 export default {
     sendSuccess,
     sendError,
-    throwError
+    throwError,
+    checkDataExistOrNot
 }

@@ -74,6 +74,11 @@ export default {
         });
     },
 
+    getFailure(entity: string = 'Data') {
+        return extend({}, this.BadRequest, {
+            message: `${entity} WAS NOT fetched`
+        });
+    },
     addSuccess(entity: string = 'Data') {
         return extend({}, this.Success, {
             message: `${entity} added successfully`

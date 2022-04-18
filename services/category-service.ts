@@ -9,14 +9,14 @@ const addCategory = async (body: any) => {
             }
         })
         return createdCategoty
-        // return requestHandler.sendSuccess(res, {})
     } catch (error) {
+        console.log(error)
         throw successAndErrors.addFailure('Category')
     }
 }
 const listCategories = async () => {
     try {
-       return await prisma.category.findMany({
+        return await prisma.category.findMany({
             include: {
                 vehicles: true
             },
@@ -24,32 +24,41 @@ const listCategories = async () => {
                 name: "asc"
             }
         })
+    } catch (error) {
+        throw successAndErrors.getFailure('Category')
 
-        // return requestHandler.sendSuccess(res, {})
-    } catch (error) {
-        // return requestHandler.sendError(res, error)
     }
 }
 
-const getCategory = async () => {
+const getCategory = async (id: string) => {
     try {
-        // return requestHandler.sendSuccess(res, {})
+        return await prisma.category.findFirst({
+            where: { id: id },
+            include: {
+                vehicles: true
+            }
+        })
     } catch (error) {
-        // return requestHandler.sendError(res, error)
+        throw successAndErrors.getFailure('Category')
     }
 }
-const updateCategory = async () => {
+const updateCategory = async (id: string, body: any) => {
     try {
-        // return requestHandler.sendSuccess(res, {})
+        return await prisma.category.update({
+            where: { id: id },
+            data: body
+        })
     } catch (error) {
-        // return requestHandler.sendError(res, error)
+        throw successAndErrors.updateFailure('Category')
     }
 }
-const deleteCategory = async () => {
+const deleteCategory = async (id: string) => {
     try {
-        // return requestHandler.sendSuccess(res, {})
+        return await prisma.category.delete({
+            where: { id: id }
+        })
     } catch (error) {
-        // return requestHandler.sendError(res, error)
+        throw successAndErrors.deleteFailure('Category')
     }
 }
 
