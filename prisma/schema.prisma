@@ -36,65 +36,67 @@ model User {
   isAcceptedTerms Boolean
   username        String
   password        String
-  userRole        UserRole     @default(COMMUNITY)
+  userRole        UserRole
   profile         Profile?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
 }
+
 //Couple+
 model Profile {
-  id                 String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName          String
-  lastName           String
-  phoneNumber        String
-  addressLine1       String
-  addressLine2       String?
-  city               String
-  state              String
-  zipCode            String
-  country            String
-  nationality        String
-  profession         String
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  firstName    String
+  lastName     String
+  phoneNumber  String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  state        String
+  zipCode      String
+  country      String
+  nationality  String
+  profession   String
 
   //Family with Children + New Arrivals
   spouseName         String?
   spouseEmailAddress String?
   numberOfChildren   Int?
-  
+
   //Single/Student (above 18 years)
   studyingCourse String?
   UniCollegeName String?
-  
+
   //New Arrivals
   dateofArrival DateTime?
-  bio                String
+  bio           String
 
   //Executive Member
-  whyJoinAsExecutiveMember String?
+  whyJoinAsExecutiveMember                     String?
   howWouldYoulikeToServeAsPassaExecutiveMember String?
-  whatInspiresYouToServeCommunity String?
+  whatInspiresYouToServeCommunity              String?
   //Volunteer Member
-  WhatCapacityDoYouWantToServeTheCommunity String?
+  WhatCapacityDoYouWantToServeTheCommunity     String?
 
-  user               User   @relation(fields: [userId], references: [id])
-  userId             Int    @unique
-  profileRole        ProfileRole
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int         @unique
+  profileRole ProfileRole
 }
 
-enum ProfileRole{
-  COUPLE//$30
-  FAMILY_WITH_CHILDREN //50
-  SINGLE_AND_STUDENT//$20//$20
-  LIFETIME_FREE//0
-  DONORS//$500
-  NEW_ARRIVALS//
-}
 enum UserRole {
   ADMIN
   EXECUTIVE
   VOLUNTEER
   FANICIAL
-  COMMUNITY  
+  COMMUNITY
+}
+
+enum ProfileRole {
+  COUPLE //$30
+  FAMILY_WITH_CHILDREN //50
+  SINGLE_AND_STUDENT //$20//$20
+  LIFETIME_FREE //0
+  DONORS //$500
+  NEW_ARRIVALS //
 }
 
 // model Post {
