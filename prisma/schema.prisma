@@ -36,7 +36,7 @@ model User {
   isAcceptedTerms Boolean
   username        String
   password        String
-  role            Role     @default(USER)
+  userRole        UserRole     @default(COMMUNITY)
   profile         Profile?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
@@ -55,23 +55,46 @@ model Profile {
   country            String
   nationality        String
   profession         String
+
   //Family with Children + New Arrivals
   spouseName         String?
   spouseEmailAddress String?
   numberOfChildren   Int?
+  
   //Single/Student (above 18 years)
   studyingCourse String?
   UniCollegeName String?
+  
   //New Arrivals
   dateofArrival DateTime?
   bio                String
+
+  //Executive Member
+  whyJoinAsExecutiveMember String?
+  howWouldYoulikeToServeAsPassaExecutiveMember String?
+  whatInspiresYouToServeCommunity String?
+  //Volunteer Member
+  WhatCapacityDoYouWantToServeTheCommunity String?
+
   user               User   @relation(fields: [userId], references: [id])
   userId             Int    @unique
+  profileRole        ProfileRole
 }
 
-enum Role {
-  USER
+enum ProfileRole{
+  COUPLE//$30
+  FAMILY_WITH_CHILDREN //50
+  SINGLE_AND_STUDENT//$20//$20
+  LIFETIME_FREE//0
+  DONORS//$500
+  NEW_ARRIVALS//
+}
+enum UserRole {
   ADMIN
+  EXECUTIVE
+  VOLUNTEER
+  FANICIAL
+  COMMUNITY  
 }
 
 // model Post {
