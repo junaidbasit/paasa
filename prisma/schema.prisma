@@ -64,7 +64,7 @@ model Profile {
 
   //Single/Student (above 18 years)
   studyingCourse String?
-  UniCollegeName String?
+  uniCollegeName String?
 
   //New Arrivals
   dateofArrival DateTime?
@@ -75,7 +75,7 @@ model Profile {
   howWouldYoulikeToServeAsPassaExecutiveMember String?
   whatInspiresYouToServeCommunity              String?
   //Volunteer Member
-  WhatCapacityDoYouWantToServeTheCommunity     String?
+  whatCapacityDoYouWantToServeTheCommunity     String?
 
   user        User        @relation(fields: [userId], references: [id])
   userId      Int         @unique
