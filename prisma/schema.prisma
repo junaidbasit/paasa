@@ -24,17 +24,20 @@ model Vehicle {
   name            String
   description     String
   seatingCapacity Int
-  category        Category @relation(fields: [vehicleId], references: [id])
-  vehicleId       String   @db.ObjectId
+  model           String
+  plate           String
+  category        Category @relation(fields: [categoryId], references: [id])
+  categoryId      String   @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
+  available        Boolean  @default(true)
 }
 
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
   isAcceptedTerms Boolean
-  username        String
+  username        String?
   password        String
   userRole        UserRole
   profile         Profile?
@@ -83,10 +86,17 @@ model Profile {
 }
 
 enum UserRole {
-  ADMIN
-  EXECUTIVE
+  SUPER_ADMIN
+  CAR_RENTAL_ADMIN
+  FANICIAL_COUPLE //$30
+  FANICIAL_FAMILY_WITH_CHILDREN //50
+  FANICIAL_SINGLE_AND_STUDENT //$20//$20
+  FANICIAL_LIFETIME_FREE //0
+  FANICIAL_DONORS //$500
+  FANICIAL_NEW_ARRIVALS //
+  // EXECUTIVE
   VOLUNTEER
-  FANICIAL
+  // FANICIAL
   COMMUNITY
 }
 
@@ -98,6 +108,7 @@ enum ProfileRole {
   DONORS //$500
   NEW_ARRIVALS //
 }
+
 
 // model Post {
 //   id       String    @id @default(auto()) @map("_id") @db.ObjectId

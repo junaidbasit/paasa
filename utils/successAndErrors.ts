@@ -55,6 +55,21 @@ export default {
         }
     ),
 
+    // throwErrorIfValueNotFound1(value: any, errorMessage?: string) {
+    //     if (_.isUndefined(value) || _.isNull(value) || _.isEmpty(value)) {
+    //         return requestHandler.throwError(
+    //             NotFound.status,
+    //             NotFound.error,
+    //             errorMessage
+    //         )();
+    //     }
+    // },
+    returnErrorInCaseOfValueNotFound(entity: string) {
+
+        return extend({}, this.BadRequest, {
+            message: `${entity} is empty or not found, Please provide valid ${entity}`
+        });
+    },
     // REST
 
     addFailure(entity: string = 'Data') {

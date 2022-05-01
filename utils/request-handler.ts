@@ -20,7 +20,7 @@ const catchError = () => {
 };
 
 const sendSuccess = (res: Response, data: any, status?: number, message?: string) => {
-    res.status(status ?? 200).json({
+   return res.status(status ?? 200).json({
         type: 'success',
         message: message || 'Success result',
         data,

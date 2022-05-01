@@ -1,5 +1,6 @@
 import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
+// import { Vehicle } from '@prisma/client';
 
 const addCategory = async (body: any) => {
     try {
