@@ -30,15 +30,15 @@ model Vehicle {
   categoryId      String   @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
-  available        Boolean  @default(true)
+  available       Boolean  @default(true)
 }
 
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
+  password        String
   isAcceptedTerms Boolean
   username        String?
-  password        String
   userRole        UserRole
   profile         Profile?
   createdAt       DateTime @default(now())
@@ -71,7 +71,7 @@ model Profile {
 
   //New Arrivals
   dateofArrival DateTime?
-  bio           String
+  bio           String?
 
   //Executive Member
   whyJoinAsExecutiveMember                     String?
@@ -80,20 +80,21 @@ model Profile {
   //Volunteer Member
   whatCapacityDoYouWantToServeTheCommunity     String?
 
-  user        User        @relation(fields: [userId], references: [id])
-  userId      Int         @unique
-  profileRole ProfileRole
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+  // profileRole ProfileRole
 }
 
 enum UserRole {
   SUPER_ADMIN
   CAR_RENTAL_ADMIN
-  FANICIAL_COUPLE //$30
-  FANICIAL_FAMILY_WITH_CHILDREN //50
-  FANICIAL_SINGLE_AND_STUDENT //$20//$20
-  FANICIAL_LIFETIME_FREE //0
-  FANICIAL_DONORS //$500
-  FANICIAL_NEW_ARRIVALS //
+  FINANCIAL
+  // FANICIAL_COUPLE //$30
+  // FANICIAL_FAMILY_WITH_CHILDREN //50
+  // FANICIAL_SINGLE_AND_STUDENT //$20//$20
+  // FANICIAL_LIFETIME_FREE //0
+  // FANICIAL_DONORS //$500
+  // FANICIAL_NEW_ARRIVALS //
   // EXECUTIVE
   VOLUNTEER
   // FANICIAL
@@ -108,7 +109,6 @@ enum ProfileRole {
   DONORS //$500
   NEW_ARRIVALS //
 }
-
 
 // model Post {
 //   id       String    @id @default(auto()) @map("_id") @db.ObjectId

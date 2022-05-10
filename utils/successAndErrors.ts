@@ -64,7 +64,7 @@ export default {
     //         )();
     //     }
     // },
-    returnErrorInCaseOfValueNotFound(entity: string) {
+    returnErrorValueNotFound(entity: string) {
 
         return extend({}, this.BadRequest, {
             message: `${entity} is empty or not found, Please provide valid ${entity}`

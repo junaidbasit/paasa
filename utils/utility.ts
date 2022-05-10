@@ -1,5 +1,4 @@
 import _ from "lodash";
-
 export default {
     validateEmail(email: string) {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -21,6 +20,12 @@ export default {
     formatEmail(value: string) {
         return value?.trim()?.toLowerCase();
     },
+    checkValueIsEmptyOrUndefined(value: any) {
+        return _.isUndefined(value) || _.isNull(value) || _.isEmpty(value) ? true : false;
+    },
+    pickOnlyInterestedFields(data: any, fields: Array<string>) {
+        return _.pick(data, fields);
+    },
     // throwErrorIfValueNotFound(value: any, errorMessage: string) {
     //     if (_.isUndefined(value) || _.isNull(value) || _.isEmpty(value)) {
     //         return requestHandler.throwError(
@@ -29,4 +34,4 @@ export default {
     //             errorMessage
     //         )();
     //     }
-    // }
+}
