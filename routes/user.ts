@@ -15,4 +15,5 @@ router.post("/forgot-password", userController.forgotPassword); // forgot passwo
 router.post("/change-password", authenticated, userController.changePassword); // change/update password
 router.put("/update", authenticated, userController.updateUser);
 
+
 export default router;

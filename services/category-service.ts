@@ -18,6 +18,9 @@ const addCategory = async (body: any) => {
 const listCategories = async () => {
     try {
         return await prisma.category.findMany({
+            where: {
+                isActive: true
+            },
             include: {
                 vehicles: true
             },

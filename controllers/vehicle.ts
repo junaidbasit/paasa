@@ -6,7 +6,7 @@ import _ from "lodash";
 
 const addVehicle = async (req: Request, res: Response) => {
     try {
-        const body = _.pick(req?.body,['name','description',"seatingCapacity"])
+        const body = _.pick(req?.body, ['name', 'description', "seatingCapacity"])
         requestHandler.checkDataExistOrNot(body, "Please provide vehicle data")
         const categoryId = req?.body?.categoryId ?? ""
         requestHandler.checkDataExistOrNot(categoryId, "Please provide category id")
@@ -39,7 +39,7 @@ const updateVehicle = async (req: Request, res: Response) => {
     try {
         const id = req?.params?.id ?? ""
         requestHandler.checkDataExistOrNot(id, "Please provide vehicle id")
-        const body = _.pick(req?.body,['name','description',"seatingCapacity"])
+        const body = _.pick(req?.body, ['name', 'description', "seatingCapacity", "price"])
         requestHandler.checkDataExistOrNot(body, "Please provide vehicle data")
         const data = await vehicleService.updateVehicle(id, body)
         return requestHandler.sendSuccess(res, data)
