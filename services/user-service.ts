@@ -8,6 +8,7 @@ import { User, Profile } from "../types/interfaces";
 import appConfig from "../config/app-config";
 const authConfig = appConfig.authConfig;
 import jwt from "jsonwebtoken";
+import { User as PrismaUser } from '@prisma/client';
 
 
 const createSuperAdminUser = async () => {
@@ -179,6 +180,28 @@ const generateToken = (user: any) => {
     });
     return token;
 };
+const changePassword = async (user: PrismaUser, body: any) => {
+    try {
+        const { oldPassword, newPassword } = body;
+        if (bcrypt.compareSync(oldPassword, user?.password)) {
+            const newHashPassword = hashPassword(newPassword);
+            return await prisma.user.update({
+                data: {
+                    password: newHashPassword
+                },
+                where: {
+                    id: user?.id
+                }
+            });
+        } else {
+            throw successAndErrors.addFailure("Old password is not correct");
+        }
+    } catch (error) {
+        throw successAndErrors.addFailure("Old password is not correct");
+    }
+}
+
+
 // let checkUserNameAlreadyExistOrNot = async (userName) => {
 //     try {
 //         let findUserWithUserName = await User.find({ username: userName });
@@ -200,5 +223,6 @@ export {
     createSuperAdminUser,
     createUser,
     validateUserWithEmailAndPassword,
-    generateToken
+    generateToken,
+    changePassword
 }

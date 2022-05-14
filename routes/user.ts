@@ -11,8 +11,8 @@ const router = Router();
 router.get("/me", authenticated, userController.getCurrentUser);
 router.post("/login", userController.loginUser);
 router.post("/register", userController.signupUser);
-router.post("/forgot-password", userController.forgotPassword); // forgot password
-router.post("/change-password", authenticated, userController.changePassword); // change/update password
+router.post("/forgotPassword", userController.forgotPassword); // forgot password
+router.post("/changePassword", authenticated, userController.changePassword); // change/update password
 router.put("/update", authenticated, userController.updateUser);
 
 

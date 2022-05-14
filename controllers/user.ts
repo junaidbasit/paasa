@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import requestHandler from "../utils/request-handler";
 import { userService } from "../services";
 import _ from "lodash";
+import { User } from '@prisma/client';
 
 const getCurrentUser = async (req: Request, res: Response) => {
     try {
@@ -43,7 +44,15 @@ const loginUser = async (req: Request, res: Response) => {
 };
 
 const changePassword = async (req: Request, res: Response) => {
-
+    try {
+        const body = req?.body;
+        const user = req?.user as User;
+        requestHandler.checkDataExistOrNot(body, "Please provide user data")
+        const data = await userService.changePassword(user, body);
+        return requestHandler.sendSuccess(res, data);
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
 };
 
 const updateUser = async (req: Request, res: Response) => {
