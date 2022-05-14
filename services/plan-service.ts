@@ -2,6 +2,7 @@ import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
 import _ from "lodash";
 import plansConfig from "../config/plans";
+import { User } from '@prisma/client';
 
 const addPlan = async (body: any) => {
     try {
@@ -77,6 +78,38 @@ const deletePlan = async (id: string) => {
     }
 }
 
+const activePlan = async (body: any, user: User) => {
+    try {
+        const { planId, startDate, endDate } = body;
+
+        const activePlan = await prisma.userPlan.findFirst({
+            where: { userId: user?.id }
+        });
+
+        if (_.isEmpty(activePlan) || _.isNull(activePlan)) {
+            return await prisma.userPlan.create({
+                data: {
+                    user: { connect: { id: user?.id } },
+                    plan: { connect: { id: planId } },
+                    startDate,
+                    endDate
+                },
+                include: { plan: true }
+            });
+        } else {
+            return await prisma.userPlan.update({
+                data: { startDate, endDate, planId },
+                where: { id: activePlan?.id },
+                include: { plan: true }
+            })
+        }
+    }
+    catch (error) {
+        console.log(error);
+
+        throw successAndErrors.addFailure('Plan')
+    }
+}
 
 export {
     deletePlan,
@@ -84,5 +117,6 @@ export {
     getPlan,
     listPlans,
     addPlan,
-    loadPlansIntoDatabase
+    loadPlansIntoDatabase,
+    activePlan
 }

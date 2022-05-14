@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import requestHandler from "../utils/request-handler";
 import { planService } from "../services";
 import _ from "lodash";
+import { User } from '@prisma/client';
 
 const addPlan = async (req: Request, res: Response) => {
     try {
@@ -22,6 +23,18 @@ const loadPlansIntoDb = async (req: Request, res: Response) => {
         return requestHandler.sendError(res, error)
     }
 }
+const userPlanActivation = async (req: Request, res: Response) => {
+    try {
+        const body = _.pick(req?.body, ['planId', 'startDate', 'endDate']);
+        const user = req?.user as User;
+        requestHandler.checkDataExistOrNot(body, "Please provide Plan data")
+        const data = await planService.activePlan(body, user)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
+
 const listPlans = async (req: Request, res: Response) => {
     try {
         const data = await planService.listPlans()
@@ -71,5 +84,6 @@ export {
     getPlan,
     listPlans,
     addPlan,
-    loadPlansIntoDb
+    loadPlansIntoDb,
+    userPlanActivation
 }

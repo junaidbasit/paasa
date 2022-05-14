@@ -16,7 +16,7 @@ model Category {
   description String
   isActive    Boolean
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   vehicles    Vehicle[]
 }
 
@@ -32,20 +32,21 @@ model Vehicle {
   category        Category @relation(fields: [categoryId], references: [id])
   categoryId      String   @db.ObjectId
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   available       Boolean  @default(true)
 }
 
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  email           String    @unique
   password        String
   isAcceptedTerms Boolean
   username        String?
   userRole        UserRole
+  userPlan        UserPlan?
   profile         Profile?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 //Couple+
@@ -131,7 +132,23 @@ model Plan {
   member      PlanMember
   isActive    Boolean
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userPlan    UserPlan[]
+}
+
+model UserPlan {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+
+  plan   Plan   @relation(fields: [planId], references: [id])
+  planId String @db.ObjectId
+
+  
+  startDate  DateTime
+  endDate    DateTime
+  activeDate DateTime @default(now())
 }
 
 // model Post {
