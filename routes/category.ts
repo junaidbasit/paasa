@@ -4,6 +4,7 @@ import { categoryController } from "../controllers"
 const router = Router();
 router.post("/", categoryController.addCategory)
 router.get("/", categoryController.listCategories);
+router.get("/listVehiclesByCategory/:id", categoryController.listVehiclesByCategory);
 router.get("/:id", categoryController.getCategory)//req.params.id
 router.put("/:id", categoryController.updateCategory)
 router.delete("/:id", categoryController.deleteCategory)//[auth, admin,

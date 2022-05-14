@@ -14,7 +14,7 @@ model Category {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  isActive    Boolean
+  isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   vehicles    Vehicle[]
@@ -28,12 +28,11 @@ model Vehicle {
   model           String
   plate           String
   price           Float
-  isActive        Boolean
   category        Category @relation(fields: [categoryId], references: [id])
   categoryId      String   @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  available       Boolean  @default(true)
+  isAvailable       Boolean  @default(true)
 }
 
 model User {
@@ -145,7 +144,7 @@ model UserPlan {
   plan   Plan   @relation(fields: [planId], references: [id])
   planId String @db.ObjectId
 
-  
+
   startDate  DateTime
   endDate    DateTime
   activeDate DateTime @default(now())

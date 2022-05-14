@@ -1,6 +1,11 @@
 import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
+import _ from "lodash";
 
+
+const pickedOnlySelectedFields = (body: any) => {
+    return _.pick(body, ['name', 'description', "seatingCapacity", "model", "plate", "price", "isAvailable"])
+}
 const addVehicle = async (body: any, categoryId: string) => {
     try {
         const createdVehicle = await prisma.vehicle.create({
@@ -32,6 +37,7 @@ const listVehicles = async () => {
             }
         })
     } catch (error) {
+        console.log(error);
         throw successAndErrors.getFailure('Vehicle')
     }
 }
@@ -74,5 +80,6 @@ export {
     updateVehicle,
     getVehicle,
     listVehicles,
-    addVehicle
+    addVehicle,
+    pickedOnlySelectedFields
 }

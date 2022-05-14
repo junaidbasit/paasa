@@ -5,7 +5,7 @@ import _ from "lodash";
 
 const addCategory = async (req: Request, res: Response) => {
     try {
-        const body = _.pick(req?.body,['name','description'])
+        const body = _.pick(req?.body, ['name', 'description', "isActive"])
         requestHandler.checkDataExistOrNot(body, "Please provide category data")
         const data = await categoryService.addCategory(body)
         return requestHandler.sendSuccess(res, data)
@@ -21,10 +21,21 @@ const listCategories = async (req: Request, res: Response) => {
         return requestHandler.sendError(res, error)
     }
 }
+const listVehiclesByCategory = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id ?? "";
+        requestHandler.checkDataExistOrNot(id, "Please provide category id")
+        const data = await categoryService.listVehicleByCategory(id)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
+
 
 const getCategory = async (req: Request, res: Response) => {
     try {
-        const id = req?.params?.id ?? ""
+        const id = req?.params?.id ?? "";
         requestHandler.checkDataExistOrNot(id, "Please provide category id")
         const data = await categoryService.getCategory(id)
         return requestHandler.sendSuccess(res, data)
@@ -36,7 +47,7 @@ const updateCategory = async (req: Request, res: Response) => {
     try {
         const id = req?.params?.id ?? ""
         requestHandler.checkDataExistOrNot(id, "Please provide category id")
-        const body = _.pick(req?.body,['name','description'])
+        const body = _.pick(req?.body, ['name', 'description', "isActive"])
         requestHandler.checkDataExistOrNot(body, "Please provide category data")
         const data = await categoryService.updateCategory(id, body)
         return requestHandler.sendSuccess(res, data)
@@ -61,5 +72,6 @@ export {
     updateCategory,
     getCategory,
     listCategories,
-    addCategory
+    addCategory,
+    listVehiclesByCategory
 }
