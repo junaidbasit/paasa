@@ -1,7 +1,7 @@
 import express, { Request, Response, Application, NextFunction } from "express";
 // import { initialiseSupertokensAuth } from "./utils/auth";
 import apiRoutes from "./routes";
-import bootService from "./services/boot-service";
+import startUp from "./startup";
 
 require("dotenv").config();
 
@@ -38,5 +38,6 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(apiPort, () => {
   console.log(`Server is running on port ${apiPort}`);
+  startUp.runStartUp();
   // bootService.loadPlansIntoDatabase();
 });

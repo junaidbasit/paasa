@@ -4,8 +4,12 @@ import _ from "lodash";
 
 
 const pickedOnlySelectedFields = (body: any) => {
-    return _.pick(body, ['name', 'description', "seatingCapacity", "model", "plate", "price", "isAvailable"])
-}
+    return _.pick(body, ['name', 'description', "seatingCapacity", "model", "plate", "dailyRent", "isAvailable", "securityDeposit"])
+};
+const pickedOnlySelectedFieldsForVehicleDiscount = (body: any) => {
+    return _.pick(body, ['discount', 'memberShip'])
+};
+
 const addVehicle = async (body: any, categoryId: string) => {
     try {
         const createdVehicle = await prisma.vehicle.create({
@@ -74,6 +78,43 @@ const deleteVehicle = async (id: string) => {
     }
 }
 
+const addVehicleDiscount = async (body: any) => {
+    try {
+        const createdVehicleDiscount = await prisma.vehicleDiscount.create({
+            data: body
+        })
+        return createdVehicleDiscount
+    } catch (error) {
+        throw successAndErrors.addFailure('Vehicle Discount')
+    }
+}
+const listVehiclesDiscount = async () => {
+    try {
+        return await prisma.vehicleDiscount.findMany({})
+    } catch (error) {
+        throw successAndErrors.getFailure('Vehicle Discount')
+    }
+}
+const getVehicleDiscount = async (id: string) => {
+    try {
+        return await prisma.vehicleDiscount.findFirst({
+            where: { id: id }
+        })
+    } catch (error) {
+        throw successAndErrors.getFailure('Vehicle Discount')
+    }
+}
+const updateVehicleDiscount = async (id: string, body: any) => {
+    try {
+        return await prisma.vehicleDiscount.update({
+            where: { id: id },
+            data: body
+        })
+    } catch (error) {
+        throw successAndErrors.updateFailure('Vehicle Discount')
+    }
+}
+
 
 export {
     deleteVehicle,
@@ -81,5 +122,10 @@ export {
     getVehicle,
     listVehicles,
     addVehicle,
-    pickedOnlySelectedFields
+    pickedOnlySelectedFields,
+    addVehicleDiscount,
+    listVehiclesDiscount,
+    getVehicleDiscount,
+    updateVehicleDiscount,
+    pickedOnlySelectedFieldsForVehicleDiscount
 }

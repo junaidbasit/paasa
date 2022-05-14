@@ -58,11 +58,58 @@ const deleteVehicle = async (req: Request, res: Response) => {
     }
 }
 
+ const listVehiclesDiscount = async (req: Request, res: Response) => {
+    try {
+        const data = await vehicleService.listVehiclesDiscount()
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
+
+const getVehicleDiscount = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id ?? ""
+        requestHandler.checkDataExistOrNot(id, "Please provide vehicle id")
+        const data = await vehicleService.getVehicleDiscount(id)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
+
+const updateVehicleDiscount = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id ?? ""
+        requestHandler.checkDataExistOrNot(id, "Please provide vehicle id")
+        const body = vehicleService.pickedOnlySelectedFieldsForVehicleDiscount(req?.body);
+        requestHandler.checkDataExistOrNot(body, "Please provide vehicle discount data")
+        const data = await vehicleService.updateVehicleDiscount(id, body)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
+
+const addVehicleDiscount = async (req: Request, res: Response) => {
+    try {
+        const body = vehicleService.pickedOnlySelectedFieldsForVehicleDiscount(req?.body);
+        requestHandler.checkDataExistOrNot(body, "Please provide vehicle discount data")
+        const data = await vehicleService.addVehicleDiscount(body)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+}
 
 export {
     deleteVehicle,
     updateVehicle,
     getVehicle,
     listVehicles,
-    addVehicle
+    addVehicle,
+    listVehiclesDiscount,
+    getVehicleDiscount,
+    updateVehicleDiscount,
+    addVehicleDiscount
 }

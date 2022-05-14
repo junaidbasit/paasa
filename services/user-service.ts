@@ -4,7 +4,6 @@ import { UserRole } from "../types/enums";
 import { prisma } from "../utils/db";
 import utility from "../utils/utility";
 import successAndErrors from "../utils/successAndErrors";
-import { User, Profile } from "../types/interfaces";
 import appConfig from "../config/app-config";
 const authConfig = appConfig.authConfig;
 import jwt from "jsonwebtoken";
@@ -31,9 +30,6 @@ const createUser = async (user: any) => {
 
     let userClone: any = _.clone(utility.pickOnlyInterestedFields(user, ["password", "email", "userRole", "isAcceptedTerms"]));
     let profileClone = _.clone(user?.profile);
-
-    console.log("profileClone ", profileClone, "userClone = ", userClone);
-
 
     if (!utility.validateEmail(userClone?.email)) {
         return successAndErrors.returnErrorValueNotFound("email");
