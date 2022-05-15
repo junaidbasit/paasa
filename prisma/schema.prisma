@@ -21,7 +21,7 @@ model Category {
 }
 
 model Vehicle {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   description     String
   seatingCapacity Int
@@ -29,11 +29,12 @@ model Vehicle {
   plate           String
   dailyRent       Float
   securityDeposit Float
-  category        Category @relation(fields: [categoryId], references: [id])
-  categoryId      String   @db.ObjectId
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  isAvailable     Boolean  @default(true)
+  category        Category         @relation(fields: [categoryId], references: [id])
+  categoryId      String           @db.ObjectId
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  isAvailable     Boolean          @default(true)
+  vehicleBooking  VehicleBooking[]
 }
 
 model VehicleDiscount {
@@ -46,16 +47,17 @@ model VehicleDiscount {
 }
 
 model User {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  email           String    @unique
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  email           String           @unique
   password        String
-  isAcceptedTerms Boolean   @default(false)
+  isAcceptedTerms Boolean          @default(false)
   username        String?
   userRole        UserRole
   userPlan        UserPlan?
   profile         Profile?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  VehicleBooking  VehicleBooking[]
 }
 
 //Couple+
@@ -163,6 +165,39 @@ model UserPlan {
   startDate  DateTime
   endDate    DateTime
   activeDate DateTime @default(now())
+}
+
+model VehicleBooking {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  amountCharged        Float
+  firstName            String
+  lastName             String
+  phoneNumber          String
+  emergencyPhoneNumber String
+  email                String
+  address              String
+
+  nameOfDriver        String
+  driverLicenseNumber String
+  bookingReason       String
+  isAcceptedTerms     Boolean
+  startDate           DateTime
+  endDate             DateTime
+  bookingDate         DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String        @unique @db.ObjectId
+  vehicle       Vehicle       @relation(fields: [vehicleId], references: [id])
+  vehicleId     String        @db.ObjectId
+  paymentStatus PaymentStatus @default(PENDING)
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }
 
 // model Post {

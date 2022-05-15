@@ -1,6 +1,7 @@
 import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
 import _ from "lodash";
+import utility from "../utils/utility";
 
 
 const pickedOnlySelectedFields = (body: any) => {
@@ -32,14 +33,38 @@ const addVehicle = async (body: any, categoryId: string) => {
 }
 const listVehicles = async () => {
     try {
-        return await prisma.vehicle.findMany({
+        const todayStartDay = utility.getStartDayOfCurrentDay();
+        const vehicles = await prisma.vehicle.findMany({
+            where: {
+                isAvailable: true,
+            },
             include: {
-                category: true
+                category: true,
+                vehicleBooking: {
+                    where: {
+                        OR: [{ startDate: { gte: todayStartDay } },
+                        { endDate: { gte: todayStartDay } }
+                        ]
+                    }
+                }
             },
             orderBy: {
                 name: "asc"
             }
-        })
+        });
+        const vehiclesWithBooking = [];
+        for (const single of vehicles) {
+            const vehicleBooking = single?.vehicleBooking;
+            const datesAlreadybooked = vehicleBooking?.map(x =>
+                utility.getDatesBetweenTwoDates(utility.getOnlyDate(x?.startDate), utility.getOnlyDate(x?.endDate)))
+            const datesAlreadybookedFlatten = _.flatten(datesAlreadybooked);
+            const vehicleWithBooking = {
+                ...single,
+                datesAlreadybooked: datesAlreadybookedFlatten
+            };
+            vehiclesWithBooking.push(vehicleWithBooking);
+        }
+        return vehiclesWithBooking
     } catch (error) {
         console.log(error);
         throw successAndErrors.getFailure('Vehicle')
