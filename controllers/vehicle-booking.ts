@@ -29,10 +29,42 @@ const addbooking = async (req: Request, res: Response) => {
     }
 };
 
-const getAll = async (req: Request, res: Response) => {
+const getAllBookings = async (req: Request, res: Response) => {
     try {
-        const user = req?.user;
-        const data = await vehicleBookingService.getAllBookings(user)
+        const query = req?.query;
+        const data = await vehicleBookingService.getAllBookings(query)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+};
+
+const getBooking = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id;
+        const data = await vehicleBookingService.getBooking(id)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+};
+
+const updateBooking = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id;
+        const body = vehicleBookingService.pickOnlyUpdateBookingSelectedFields(req?.body);
+        requestHandler.checkDataExistOrNot(body, "Please provide update booking data");
+        const data = await vehicleBookingService.updateBooking(id, body)
+        return requestHandler.sendSuccess(res, data)
+    } catch (error) {
+        return requestHandler.sendError(res, error)
+    }
+};
+
+const deleteBooking = async (req: Request, res: Response) => {
+    try {
+        const id = req?.params?.id;
+        const data = await vehicleBookingService.deleteBooking(id)
         return requestHandler.sendSuccess(res, data)
     } catch (error) {
         return requestHandler.sendError(res, error)
@@ -41,5 +73,9 @@ const getAll = async (req: Request, res: Response) => {
 
 export {
     calculateRent,
-    addbooking
+    addbooking,
+    getAllBookings,
+    getBooking,
+    updateBooking,
+    deleteBooking
 }

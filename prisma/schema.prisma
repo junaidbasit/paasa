@@ -184,14 +184,15 @@ model VehicleBooking {
   isAcceptedTerms     Boolean
   startDate           DateTime
   endDate             DateTime
-  bookingDate         DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  bookingDate         DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  paymentStatus       PaymentStatus @default(PENDING)
+  isApproved          Boolean       @default(false)
 
-  user          User          @relation(fields: [userId], references: [id])
-  userId        String        @unique @db.ObjectId
-  vehicle       Vehicle       @relation(fields: [vehicleId], references: [id])
-  vehicleId     String        @db.ObjectId
-  paymentStatus PaymentStatus @default(PENDING)
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @unique @db.ObjectId
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId String  @db.ObjectId
 }
 
 enum PaymentStatus {

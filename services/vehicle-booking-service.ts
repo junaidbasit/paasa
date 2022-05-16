@@ -3,7 +3,8 @@ import utility from "../utils/utility";
 import successAndErrors from "../utils/successAndErrors";
 import _ from "lodash";
 import moment from "moment";
-
+import { UserRole } from "../types/enums";
+import { PaymentStatus } from '@prisma/client';
 
 const pickedOnlyCalculateRentSelectedFields = (body: any) => {
     return _.pick(body, ['startDate', 'endDate', 'vehicleId'])
@@ -11,6 +12,10 @@ const pickedOnlyCalculateRentSelectedFields = (body: any) => {
 
 const pickedOnlyAddBookingSelectedFields = (body: any) => {
     return _.pick(body, ['amountCharged', 'firstName', 'lastName', 'phoneNumber', 'emergencyPhoneNumber', 'email', 'address', 'nameOfDriver', 'driverLicenseNumber', 'bookingReason', 'isAcceptedTerms', 'startDate', 'endDate', 'vehicleId'])
+};
+
+const pickOnlyUpdateBookingSelectedFields = (body: any) => {
+    return _.pick(body, ['isApproved', 'paymentStatus'])
 };
 
 const format = (num: number) => num.toLocaleString('en-US', {
@@ -86,8 +91,11 @@ const addBooking = async (body: any, user: any) => {
                 throw successAndErrors.addFailure('Amount charged is not correct, Booking');
             } else {
                 const updateData: any = _.omit(body, ['vehicleId', 'startDate', 'endDate']);
+                const paymentStatus = UserRole.SUPER_ADMIN == user?.userRole ?
+                    PaymentStatus.SUCCESS : PaymentStatus.PENDING;
                 const createdVehicleBooking = await prisma.vehicleBooking.create({
                     data: {
+                        paymentStatus: paymentStatus,
                         ...updateData,
                         startDate: utility.covertDateToISOString(setStartDate),
                         endDate: utility.covertDateToISOString(setEndDate),
@@ -108,146 +116,117 @@ const addBooking = async (body: any, user: any) => {
     }
 }
 
-const getAllBookings = async (user: any) => {
-    try {
-        const todayStartDay = utility.getStartDayOfCurrentDay();
+// prisma.$use(async (params, next) => {
+//     if (params.model == 'VehicleBooking' && params.action == 'findMany') {
 
+//     }
+//     return next(params)
+// })
+
+const getAllBookings = async (query: any) => {
+    try {
+        const pagination = utility.getSkipAndTakeFromQuery(query);
         const allBookings = await prisma.vehicleBooking.findMany({
-            where: {
-                OR: [{ startDate: { gte: todayStartDay } },
-                { endDate: { gte: todayStartDay } }
-                ]
+            skip: pagination?.skip,
+            take: pagination?.take,
+            orderBy: {
+                bookingDate: 'desc'
+            },
+            include: {
+                vehicle: true,
+                user: true
             }
         });
-        const datesAlreadybooked = allBookings?.map(x =>
-            utility.getDatesBetweenTwoDates(utility.getOnlyDate(x?.startDate), utility.getOnlyDate(x?.endDate)))
-        const datesAlreadybookedFlatten = _.flatten(datesAlreadybooked);
-       
-        return allBookings
+        return allBookings?.map(x => ({
+            ...x,
+            startDate: utility.getOnlyDateFromUtcToLocal(x?.startDate),
+            endDate: utility.getOnlyDateFromUtcToLocal(x?.endDate),
+            bookingDate: utility.getOnlyDateFromUtcToLocal(x?.bookingDate)
+        }));
+
     } catch (error) {
         throw successAndErrors.getFailure('Get All Bookings');
     }
-}
-const addVehicle = async (body: any, categoryId: string) => {
+};
+
+const getBooking = async (id: string) => {
     try {
-        const createdVehicle = await prisma.vehicle.create({
-            data: {
-                ...body,
-                category: {
-                    connect: {
-                        id: categoryId
-                    }
-                }
-            },
+        const booking = await prisma.vehicleBooking.findFirst({
+            where: { id: id },
             include: {
-                category: true
+                user: true,
+                vehicle: true
             }
-        })
-        return createdVehicle
+        });
+        if (!_.isEmpty(booking) && !_.isNull(booking)) {
+            return {
+                ...booking,
+                startDate: utility.getOnlyDateFromUtcToLocal(booking?.startDate),
+                endDate: utility.getOnlyDateFromUtcToLocal(booking?.endDate),
+                bookingDate: utility.getOnlyDateFromUtcToLocal(booking?.bookingDate)
+            }
+        } else {
+            throw successAndErrors.getFailure('Booking');
+        }
     } catch (error) {
-        throw successAndErrors.addFailure('Vehicle')
+        throw successAndErrors.getFailure('Booking')
     }
 }
-const listVehicles = async () => {
+const updateBooking = async (id: string, body: any) => {
     try {
-        return await prisma.vehicle.findMany({
+        const booking = await prisma.vehicleBooking.update({
+            where: { id: id },
+            data: body,
             include: {
-                category: true
-            },
-            orderBy: {
-                name: "asc"
+                user: true,
+                vehicle: true
             }
         })
+        if (!_.isEmpty(booking) && !_.isNull(booking)) {
+            return {
+                ...booking,
+                startDate: utility.getOnlyDateFromUtcToLocal(booking?.startDate),
+                endDate: utility.getOnlyDateFromUtcToLocal(booking?.endDate),
+                bookingDate: utility.getOnlyDateFromUtcToLocal(booking?.bookingDate)
+            }
+        } else {
+            throw successAndErrors.updateFailure('Booking');
+        }
     } catch (error) {
-        console.log(error);
-        throw successAndErrors.getFailure('Vehicle')
+        throw successAndErrors.updateFailure('Booking')
+    }
+}
+const deleteBooking = async (id: string) => {
+    try {
+        const booking = await prisma.vehicleBooking.delete({
+            where: { id: id }
+        })
+        if (!_.isEmpty(booking) && !_.isNull(booking)) {
+            return {
+                ...booking,
+                startDate: utility.getOnlyDateFromUtcToLocal(booking?.startDate),
+                endDate: utility.getOnlyDateFromUtcToLocal(booking?.endDate),
+                bookingDate: utility.getOnlyDateFromUtcToLocal(booking?.bookingDate)
+            }
+        } else {
+            throw successAndErrors.deleteFailure('Booking');
+        }
+    } catch (error) {
+        throw successAndErrors.deleteFailure('Booking')
     }
 }
 
-const getVehicle = async (id: string) => {
-    try {
-        return await prisma.vehicle.findFirst({
-            where: { id: id },
-            include: {
-                category: true
-            }
-        })
-    } catch (error) {
-        throw successAndErrors.getFailure('Vehicle')
-    }
-}
-const updateVehicle = async (id: string, body: any) => {
-    try {
-        return await prisma.vehicle.update({
-            where: { id: id },
-            data: body
-        })
-    } catch (error) {
-        throw successAndErrors.updateFailure('Vehicle')
-    }
-}
-const deleteVehicle = async (id: string) => {
-    try {
-        return await prisma.vehicle.delete({
-            where: { id: id }
-        })
-    } catch (error) {
-        throw successAndErrors.deleteFailure('Vehicle')
-    }
-}
-
-const addVehicleDiscount = async (body: any) => {
-    try {
-        const createdVehicleDiscount = await prisma.vehicleDiscount.create({
-            data: body
-        })
-        return createdVehicleDiscount
-    } catch (error) {
-        throw successAndErrors.addFailure('Vehicle Discount')
-    }
-}
-const listVehiclesDiscount = async () => {
-    try {
-        return await prisma.vehicleDiscount.findMany({})
-    } catch (error) {
-        throw successAndErrors.getFailure('Vehicle Discount')
-    }
-}
-const getVehicleDiscount = async (id: string) => {
-    try {
-        return await prisma.vehicleDiscount.findFirst({
-            where: { id: id }
-        })
-    } catch (error) {
-        throw successAndErrors.getFailure('Vehicle Discount')
-    }
-}
-const updateVehicleDiscount = async (id: string, body: any) => {
-    try {
-        return await prisma.vehicleDiscount.update({
-            where: { id: id },
-            data: body
-        })
-    } catch (error) {
-        throw successAndErrors.updateFailure('Vehicle Discount')
-    }
-}
 
 
 export {
-    deleteVehicle,
-    updateVehicle,
-    getVehicle,
-    listVehicles,
-    addVehicle,
+    deleteBooking,
+    updateBooking,
+    getBooking,
     pickedOnlyCalculateRentSelectedFields,
-    addVehicleDiscount,
-    listVehiclesDiscount,
-    getVehicleDiscount,
     calculateRent,
-    updateVehicleDiscount,
     pickedOnlyAddBookingSelectedFields,
     addBooking,
     getAllBookings,
-    
+    pickOnlyUpdateBookingSelectedFields
+
 }

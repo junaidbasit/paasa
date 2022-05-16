@@ -1,5 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
+import { PaginationInput, Pagination } from "../types/interfaces";
 
 export default {
     validateEmail(email: string) {
@@ -40,6 +41,9 @@ export default {
     getOnlyDate(date: string | Date) {
         return moment(date).format("DD-MM-YYYY");
     },
+    getOnlyDateFromUtcToLocal(date: string | Date) {
+        return moment.utc(date).local().format("DD-MM-YYYY");
+    },
     covertDateToISOString(date: string | Date) {
         return moment(date, "DD-MM-YYYYTHH:mm:ss").toISOString();
     },
@@ -55,6 +59,13 @@ export default {
         }
 
         return dates;
+    },
+    getSkipAndTakeFromQuery(query: any) {
+        const paginationInput: PaginationInput = _.pick(query, ['page', 'limit']);
+        const page = parseInt(paginationInput?.page || "1"),
+            limit = parseInt(paginationInput?.limit || "10"),
+            skip = (page - 1) > -1 ? (page - 1) * limit : 0;
+        return <Pagination>{ take: limit, skip };
     }
     // .add(time, 'hours').format("DD-MM-YYYY HH:mm:ss");
 
