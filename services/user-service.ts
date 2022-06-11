@@ -32,16 +32,18 @@ const createUser = async (user: any) => {
     let profileClone = _.clone(user?.profile);
 
     if (!utility.validateEmail(userClone?.email)) {
-        return successAndErrors.returnErrorValueNotFound("email");
+        throw successAndErrors.returnErrorValueNotFound("email");
     };
 
     if (utility.checkValueIsEmptyOrUndefined(user?.password)) {
-        return successAndErrors.returnErrorValueNotFound("password");
+        throw successAndErrors.returnErrorValueNotFound("password");
     }
 
     if (utility.checkValueIsEmptyOrUndefined(user?.userRole)) {
-        return successAndErrors.returnErrorValueNotFound("user Type or Role ");
-    };
+        throw successAndErrors.returnErrorValueNotFound("User Type or Role ");
+    } else if (!(user?.userRole == UserRole.COMMUNITY || user?.userRole == UserRole.FINANCIAL || user?.userRole == UserRole.VOLUNTEER)) {
+        throw successAndErrors.returnErrorValueNotFound("User Role ");
+    }
 
     userClone.email = utility.formatEmail(user?.email);
     if (await checkUserEmailAlreadyExistOrNot(user?.email)) {

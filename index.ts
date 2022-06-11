@@ -1,4 +1,5 @@
 import express, { Request, Response, Application, NextFunction } from "express";
+import cors from 'cors';
 // import { initialiseSupertokensAuth } from "./utils/auth";
 import apiRoutes from "./routes";
 import startUp from "./startup";
@@ -15,6 +16,7 @@ const apiPort: string | number = process.env.PORT || 4000;
 // initialiseSupertokensAuth(websiteDomain, apiDomain);
 
 const app: Application = express();
+app.use((req, res, next) => { next(); }, cors({maxAge: 84600}));
 
 app.use(express.json());
 // app.use(middleware());

@@ -4,13 +4,9 @@ import { PaginationInput, Pagination } from "../types/interfaces";
 
 export default {
     validateEmail(email: string) {
-        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (re.test(email)) {
-            return true;
-        } else {
-            return false;
-            // this.throwErrorIfValueNotFound(null, "Email is not validate,Please enter valid email.")
-        }
+
+        const pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+        return pattern.test(email);
     },
     validatePassword(password: string) {
         var re = /^(?=^.{3,}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s)[0-9a-zA-Z!@#$%^&*()]*$/;
@@ -66,7 +62,7 @@ export default {
             limit = parseInt(paginationInput?.limit || "10"),
             skip = (page - 1) > -1 ? (page - 1) * limit : 0;
         return <Pagination>{ take: limit, skip };
-    }
+    },
     // .add(time, 'hours').format("DD-MM-YYYY HH:mm:ss");
 
     // throwErrorIfValueNotFound(value: any, errorMessage: string) {

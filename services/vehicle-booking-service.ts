@@ -4,7 +4,7 @@ import successAndErrors from "../utils/successAndErrors";
 import _ from "lodash";
 import moment from "moment";
 import { UserRole } from "../types/enums";
-import { PaymentStatus } from '@prisma/client';
+import { PaymentStatus, ApprovedStatus } from '@prisma/client';
 
 const pickedOnlyCalculateRentSelectedFields = (body: any) => {
     return _.pick(body, ['startDate', 'endDate', 'vehicleId'])
@@ -15,7 +15,7 @@ const pickedOnlyAddBookingSelectedFields = (body: any) => {
 };
 
 const pickOnlyUpdateBookingSelectedFields = (body: any) => {
-    return _.pick(body, ['isApproved', 'paymentStatus'])
+    return _.pick(body, ['approvedStatus', 'paymentStatus'])
 };
 
 const format = (num: number) => num.toLocaleString('en-US', {
@@ -33,7 +33,7 @@ const calculateRent = async (body: any, user: any) => {
             let discountPercentage = 0;
             if (!_.isEmpty(user?.userPlan) && !_.isNull(user?.userPlan)) {
                 const vehicleDiscount = await prisma.vehicleDiscount.findFirst({
-                    where: { memberShip: user?.userPlan?.member }
+                    where: { userRole: user?.userRole }
                 });
                 if (!_.isEmpty(vehicleDiscount) && !_.isNull(vehicleDiscount)) {
                     discountPercentage = vehicleDiscount.discount;
@@ -43,16 +43,19 @@ const calculateRent = async (body: any, user: any) => {
             const bookingEndDate = moment(endDate, "DD-MM-YYYY");
             const bookingStartDate = moment(startDate, "DD-MM-YYYY");
             const bookingDays = bookingEndDate.diff(bookingStartDate, 'days') + 1 // 1
-            const bookingPrice = vehicle.dailyRent * bookingDays;
+            const bookingPrice = vehicle?.dailyRent * bookingDays;
             const discount = bookingPrice * (discountPercentage / 100);
             const totalPrice = bookingPrice - discount;
+            const totalPriceWithSecurity = totalPrice + vehicle?.securityDeposit;
 
             return {
+                securityDeposit: parseFloat(format(vehicle?.securityDeposit)),
                 bookingDays,
+                perDayPrice: parseFloat(format(vehicle?.dailyRent)),
                 bookingPrice: parseFloat(format(bookingPrice)),
                 discount: parseFloat(format(discount)),
-                totalPrice: parseFloat(format(totalPrice)),
-                securityDeposit: vehicle.securityDeposit,
+                bookingTotalPrice: parseFloat(format(totalPrice)),
+                totalPriceWithSecurity: parseFloat(format(totalPriceWithSecurity))
             }
 
         } else {
@@ -67,15 +70,33 @@ const addBooking = async (body: any, user: any) => {
     try {
 
         const { startDate, endDate, vehicleId } = body;
+
+        const onlyStartDate = moment(startDate, "DD-MM-YYYY");
+        const onlyEndDate = moment(endDate, "DD-MM-YYYY");
+        const bookingDays = onlyEndDate.diff(onlyStartDate, 'days') + 1 // 1
+        if (bookingDays > 7) {
+            throw successAndErrors.getFailure('Booking days should be less than 7');
+        };
+
         const setStartDate = utility.setStartDayTimeToDate(startDate);
         const setEndDate = utility.setEndDayTimeToDate(endDate);
         const todayStartDay = utility.getStartDayOfCurrentDay();
 
         const alreadyBooking = await prisma.vehicleBooking.findMany({
             where: {
-                OR: [{ startDate: { gte: todayStartDay } },
-                { endDate: { gte: todayStartDay } }
-                ]
+                AND: [{
+                    OR: [{ startDate: { gte: todayStartDay } },
+                    { endDate: { gte: todayStartDay } }
+                    ]
+                },
+                {
+                    vehicleId: vehicleId
+                },
+                {
+                    OR: [{ approvedStatus: { equals: ApprovedStatus.APPROVED } },
+                    { approvedStatus: { equals: ApprovedStatus.PENDING } }
+                    ]
+                }]
             }
         });
 
@@ -86,16 +107,19 @@ const addBooking = async (body: any, user: any) => {
         const foundDates = _.intersection(datesWantToBook, datesAlreadybookedFlatten);
 
         if (_.isEmpty(alreadyBooking) || _.isEmpty(foundDates)) {
-            const { totalPrice } = await calculateRent(body, user);
-            if (totalPrice != body?.amountCharged) {
+            const { totalPriceWithSecurity } = await calculateRent(body, user);
+            if (totalPriceWithSecurity != body?.amountCharged) {
                 throw successAndErrors.addFailure('Amount charged is not correct, Booking');
             } else {
                 const updateData: any = _.omit(body, ['vehicleId', 'startDate', 'endDate']);
                 const paymentStatus = UserRole.SUPER_ADMIN == user?.userRole ?
                     PaymentStatus.SUCCESS : PaymentStatus.PENDING;
+                const bookingStatus = UserRole.SUPER_ADMIN == user?.userRole ?
+                    ApprovedStatus.APPROVED : ApprovedStatus.PENDING;
                 const createdVehicleBooking = await prisma.vehicleBooking.create({
                     data: {
                         paymentStatus: paymentStatus,
+                        approvedStatus: bookingStatus,
                         ...updateData,
                         startDate: utility.covertDateToISOString(setStartDate),
                         endDate: utility.covertDateToISOString(setEndDate),

@@ -4,6 +4,8 @@ import * as categoryController from "./category";
 import * as vehicleController from "./vehicle";
 import * as vehicleBookingController from "./vehicle-booking";
 import * as planController from "./plan";
+import * as systemController from "./system";
+import * as vehicleIssueReturn from "./vehicle-issue-return";
 
 
 export {
@@ -11,5 +13,7 @@ export {
     categoryController,
     vehicleController,
     planController,
-    vehicleBookingController
+    vehicleBookingController,
+    systemController,
+    vehicleIssueReturn
 };

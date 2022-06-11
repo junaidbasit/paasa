@@ -946,7 +946,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"isApproved\": true,\n    \"paymentStatus\":\"PENDING\"\n}",
+							"raw": "{\n    \"approvedStatus\": \"APPROVED\",\n    \"paymentStatus\": \"PENDING\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1052,6 +1052,62 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Status List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/allStatus",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"allStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Roles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/allStatus",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"allStatus"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

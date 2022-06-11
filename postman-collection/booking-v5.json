@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b8ad7519-283c-48af-b04c-67c53376f0b9",
+		"_postman_id": "07ce2792-6e07-4fe6-846c-bd1c00161f3b",
 		"name": "Passa",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -686,7 +686,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"discount\": 15,\n    \"memberShip\": \"COUPLE\"\n}",
+							"raw": "{\n    \"discount\": 15,\n    \"userRole\": \"VOLUNTEER\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -780,7 +780,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"discount\": 10\n}",
+							"raw": "{\n    \"discount\": 15\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -946,7 +946,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"isApproved\": true,\n    \"paymentStatus\":\"PENDING\"\n}",
+							"raw": "{\n    \"approvedStatus\": \"APPROVED\",\n    \"paymentStatus\": \"PENDING\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1052,6 +1052,504 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Vehicle Issue Return",
+			"item": [
+				{
+					"name": "Vehicile Issue",
+					"item": [
+						{
+							"name": "Add Vehicle Issue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookingId\": \"628e778f13b4628985393788\",\n    \"name\": \"Mujahid\",\n    \"odoMeterReading\": 12364.54,\n    \"description\": \"To be Booked\",\n    \"images\": [\n        {\n            \"source\": \"TopRoof\",\n            \"url\": \"https://i.picsum.photos/id/1036/500/500.jpg?hmac=aiblEmFfvoc7eWaaaiiw4a6RYXo1S4vkcF5KRfBhzKM\"\n        },\n        {\n            \"source\": \"Gril\",\n            \"url\": \"https://i.picsum.photos/id/383/500/600.jpg?hmac=Y2_vtfP8vHISUQzpVfCgqbC2ZEPAROigalZ3rc6I89w\"\n        }\n    ],\n    \"fuelCapacity\": \"HALF\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createIssue",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createIssue"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Vehicle Issues",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueList?limit=10&page=1",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueList"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id Issue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issue",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issue"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Vehicile Return",
+					"item": [
+						{
+							"name": "Add Vehicle Return",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Mujahid\",\n    \"odoMeterReading\": 546.36,\n    \"adjustmentNote\": \"Please adjustments\",\n    \"demagesImages\": [\n        {\n            \"source\": \"TopRoof\",\n            \"url\": \"https://i.picsum.photos/id/1036/500/500.jpg?hmac=aiblEmFfvoc7eWaaaiiw4a6RYXo1S4vkcF5KRfBhzKM\"\n        },\n        {\n            \"source\": \"Gril\",\n            \"url\": \"https://i.picsum.photos/id/383/500/600.jpg?hmac=Y2_vtfP8vHISUQzpVfCgqbC2ZEPAROigalZ3rc6I89w\"\n        }\n    ],\n    \"demagesAdjustments\": [\n        {\n            \"charges\": 123.32,\n            \"adjustment\": 100,\n            \"souce\": \"ExtraDays\"\n        }\n    ],\n    \"fuelCapacity\": \"HALF\",\n    \"bookingStartDate\": \"29-05-2022\",\n    \"bookingEndDate\": \"30-05-2022\",\n    \"returnedDate\": \"30-05-2022\",\n    \"issueVechicleId\": \"6294f28b753fa73e0f7907fe\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createReturn",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createReturn"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id Return",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/return/62950118d4c51b444f9e8726",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"return",
+										"62950118d4c51b444f9e8726"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Vehicle Returns",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/returnList?limit=10&page=1",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"returnList"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Vehicile Issue Return Charges",
+					"item": [
+						{
+							"name": "Create Issue Return Charges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"perDayExtraCharge\": 15,\n    \"clearanceCharges\": 50,\n    \"millageLimit\": 1000,\n    \"perKmMillageLimitCharges\": 5,\n    \"millageLimitCrossed\": 3000,\n    \"perKmMillageLimitCrossedCharges\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createIssueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createIssueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Issue Return Charges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Issue Return Charges Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"perDayExtraCharge\": 15,\n    \"clearanceCharges\": 50,\n    \"millageLimit\": 1000,\n    \"perKmMillageLimitCharges\": 5,\n    \"millageLimitCrossed\": 3000,\n    \"perKmMillageLimitCrossedCharges\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Status List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/allStatus",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"allStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Roles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/userRoles",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"userRoles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Images",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "images",
+							"type": "file",
+							"src": "/home/junaid-dev/Pictures/Screenshot from 2022-04-04 19-17-54.png"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": "/home/junaid-dev/Pictures/Screenshot from 2022-04-27 20-30-23.png"
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": []
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{passaURL}}/vehicleIssueReturn/uploadImages",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"vehicleIssueReturn",
+						"uploadImages"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
