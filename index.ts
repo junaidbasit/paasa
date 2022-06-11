@@ -16,13 +16,16 @@ const apiPort: string | number = process.env.PORT || 4000;
 // initialiseSupertokensAuth(websiteDomain, apiDomain);
 
 const app: Application = express();
-app.use((req, res, next) => { next(); }, cors({maxAge: 84600}));
+app.use((req, res, next) => { next(); }, cors({ maxAge: 84600 }));
 
 app.use(express.json());
 // app.use(middleware());
 
 // TODO: API Routes
 app.use("/api", apiRoutes);
+app.get("/", (req, res) => {
+  res.status(200).send("Hello Passa");
+})
 
 // app.use(errorHandler());
 
