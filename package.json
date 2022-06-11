@@ -8,7 +8,8 @@
   "main": "index.ts",
   "scripts": {
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
-    "start": "npm run prisma:generate && ts-node index.ts",
+    "prismaInstall": "npm run prisma:generate",
+    "start": "npm run  prismaInstall && ts-node index.ts",
     "start:dev": "npm run prisma:generate && npm run start",
     "prisma:seed": "prisma db seed",
     "prisma:reset": "prisma migrate reset --force",
