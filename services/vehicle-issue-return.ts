@@ -100,7 +100,7 @@ const createIssue = async (body: any) => {
         }
     }
     catch (error: any) {
-        throw successAndErrors.addFailure('Vehicle issue is not created, Please try again, Vehicle Issue');
+        throw successAndErrors.addFailure('Vehicle issue is not created, May be already issued vehicle, Please try again, Vehicle Issue');
     }
 };
 
