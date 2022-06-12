@@ -9,7 +9,8 @@
   "scripts": {
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
     "prismaInstall": "npm run prisma:generate",
-    "start": "npm run prismaInstall && ts-node index.ts",
+    "startServer": "ts-node index.ts",
+    "start": "npm run prismaInstall && npm run startServer",
     "start:dev": "npm run prisma:generate && npm run start",
     "prisma:seed": "prisma db seed",
     "prisma:reset": "prisma migrate reset --force",
@@ -27,7 +28,7 @@
     "cors": "^2.8.5",
     "ts-node": "^10.8.1",
     "tslib": "^2.4.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.7.3"
   },
   "dependencies": {
     "prisma": "3.15.1",
