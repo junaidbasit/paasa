@@ -1,7 +1,8 @@
 import express, { Request, Response, Application, NextFunction } from "express";
+import cors from 'cors';
 // import { initialiseSupertokensAuth } from "./utils/auth";
 import apiRoutes from "./routes";
-import bootService from "./services/boot-service";
+import startUp from "./startup";
 
 require("dotenv").config();
 
@@ -15,6 +16,7 @@ const apiPort: string | number = process.env.PORT || 4000;
 // initialiseSupertokensAuth(websiteDomain, apiDomain);
 
 const app: Application = express();
+app.use((req, res, next) => { next(); }, cors({maxAge: 84600}));
 
 app.use(express.json());
 // app.use(middleware());
@@ -38,5 +40,6 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(apiPort, () => {
   console.log(`Server is running on port ${apiPort}`);
+  startUp.runStartUp();
   // bootService.loadPlansIntoDatabase();
 });

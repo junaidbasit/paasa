@@ -11,4 +11,8 @@ export default {
         refresh_token_expiresin:
             process.env.JWT_REFRESH_TOKEN_EXPIRES_IN || '2d' // 2 days
     },
+    superAdminUser: {
+        email: process.env.SUPER_ADMIN_EMAIL || 'superAdmin@gmail.com',
+        password: process.env.SUPER_ADMIN_PASSWORD || 'superAdmin@123'
+    }
 };

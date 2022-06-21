@@ -18,9 +18,6 @@ const addCategory = async (body: any) => {
 const listCategories = async () => {
     try {
         return await prisma.category.findMany({
-            where: {
-                isActive: true
-            },
             include: {
                 vehicles: true
             },
@@ -66,11 +63,22 @@ const deleteCategory = async (id: string) => {
     }
 }
 
+const listVehicleByCategory = async (id: string) => {
+    try {
+        return await prisma.vehicle.findMany({
+            where: { categoryId: id }
+        })
+    } catch (error) {
+        throw successAndErrors.getFailure('Catefories')
+    }
+}
+
 
 export {
     deleteCategory,
     updateCategory,
     getCategory,
     listCategories,
-    addCategory
+    addCategory,
+    listVehicleByCategory
 }

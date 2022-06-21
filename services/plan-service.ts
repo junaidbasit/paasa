@@ -2,6 +2,7 @@ import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
 import _ from "lodash";
 import plansConfig from "../config/plans";
+import { User, UserRole } from '@prisma/client';
 
 const addPlan = async (body: any) => {
     try {
@@ -77,6 +78,59 @@ const deletePlan = async (id: string) => {
     }
 }
 
+const activePlan = async (body: any, user: User) => {
+    try {
+        const { planId, startDate, endDate } = body;
+
+        const plan = await prisma.plan.findFirst({
+            where: { id: planId }
+        });
+
+        if (_.isEmpty(plan) || _.isNull(plan)) {
+            throw successAndErrors.getFailure('Plan not found, Please provide valid plan ID')
+        };
+
+        const activePlan = await prisma.userPlan.findFirst({
+            where: { userId: user?.id }
+        });
+
+        if (_.isEmpty(activePlan) || _.isNull(activePlan)) {
+            const createdUserPlan = await prisma.userPlan.create({
+                data: {
+                    user: { connect: { id: user?.id } },
+                    plan: { connect: { id: planId } },
+                    startDate, endDate
+                },
+                include: { plan: true }
+            });
+            if (user?.userRole !== UserRole.FINANCIAL) {
+                await prisma.user.update({
+                    where: { id: user?.id },
+                    data: { userRole: { set: UserRole.FINANCIAL } }
+                });
+            }
+            return createdUserPlan;
+        } else {
+            const updatedUserPlan = await prisma.userPlan.update({
+                data: { startDate, endDate, planId },
+                where: { id: activePlan?.id },
+                include: { plan: true }
+            });
+            if (user?.userRole !== UserRole.FINANCIAL) {
+                await prisma.user.update({
+                    where: { id: user?.id },
+                    data: { userRole: { set: UserRole.FINANCIAL } }
+                });
+            }
+            return updatedUserPlan;
+        }
+    }
+    catch (error) {
+        console.log(error);
+
+        throw successAndErrors.addFailure('Plan')
+    }
+}
 
 export {
     deletePlan,
@@ -84,5 +138,6 @@ export {
     getPlan,
     listPlans,
     addPlan,
-    loadPlansIntoDatabase
+    loadPlansIntoDatabase,
+    activePlan
 }
