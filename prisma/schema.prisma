@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// const { PrismaClient, Prisma } = require('@prisma/client')
 
 generator client {
   provider = "prisma-client-js"
@@ -14,38 +15,54 @@ model Category {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  isActive    Boolean
+  isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   vehicles    Vehicle[]
 }
 
 model Vehicle {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  image           String
   name            String
   description     String
   seatingCapacity Int
   model           String
   plate           String
-  price           Float
-  isActive        Boolean
-  category        Category @relation(fields: [categoryId], references: [id])
-  categoryId      String   @db.ObjectId
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
-  available       Boolean  @default(true)
+  dailyRent       Float
+  securityDeposit Float
+  category        Category         @relation(fields: [categoryId], references: [id])
+  categoryId      String           @db.ObjectId
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  isAvailable     Boolean          @default(true)
+  vehicleBooking  VehicleBooking[]
+}
+
+model VehicleDiscount {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  discount  Float
+  type      DiscountType @default(PERCENTAGE)
+  userRole  UserRole
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  id              String               @id @default(auto()) @map("_id") @db.ObjectId
+  email           String               @unique
   password        String
-  isAcceptedTerms Boolean
+  isAcceptedTerms Boolean              @default(false)
+  isEmailVerfied  Boolean              @default(false)
+  // emailVerification String?
   username        String?
   userRole        UserRole
+  userPlan        UserPlan?
   profile         Profile?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  VehicleBooking  VehicleBooking[]
+  assetBookings   AssetBookingBundle[]
 }
 
 //Couple+
@@ -56,17 +73,18 @@ model Profile {
   phoneNumber  String
   addressLine1 String
   addressLine2 String?
-  city         String
-  state        String
-  zipCode      String
-  country      String
+  city         String?
+  state        String?
+  zipCode      String?
+  country      String?
   nationality  String
-  profession   String
+  profession   String?
 
   //Family with Children + New Arrivals
   spouseName         String?
   spouseEmailAddress String?
   numberOfChildren   Int?
+  childernAges       Json[]
 
   //Single/Student (above 18 years)
   studyingCourse String?
@@ -104,6 +122,11 @@ enum UserRole {
   COMMUNITY
 }
 
+enum DiscountType {
+  PERCENTAGE
+  AMOUNT
+}
+
 enum ProfileRole {
   COUPLE //$30
   FAMILY_WITH_CHILDREN //50
@@ -131,7 +154,262 @@ model Plan {
   member      PlanMember
   isActive    Boolean
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userPlan    UserPlan[]
+}
+
+model UserPlan {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+
+  plan   Plan   @relation(fields: [planId], references: [id])
+  planId String @db.ObjectId
+
+  startDate  DateTime
+  endDate    DateTime
+  activeDate DateTime @default(now())
+}
+
+model VehicleBooking {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  amountCharged        Float?
+  firstName            String?
+  lastName             String?
+  phoneNumber          String?
+  emergencyPhoneNumber String?
+  email                String?
+  address              String?
+
+  nameOfDriver        String?
+  driverLicenseNumber String?
+  bookingReason       String?
+  isAcceptedTerms     Boolean?
+  startDate           DateTime
+  endDate             DateTime
+  bookingDate         DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  paymentStatus       PaymentStatus  @default(PENDING)
+  approvedStatus      ApprovedStatus @default(PENDING)
+
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String         @unique @db.ObjectId
+  vehicle       Vehicle        @relation(fields: [vehicleId], references: [id])
+  vehicleId     String         @db.ObjectId
+  IssueVechicle IssueVechicle?
+}
+
+model IssueVechicle {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  odoMeterReading Float
+  // odoMeterReadingImage String?
+  description     String?
+  fuelCapacity    FuelCapacity
+  images          Json[]
+  // bookingStartDate     DateTime?
+  // bookingEndDate       DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  booking         VehicleBooking  @relation(fields: [bookingId], references: [id])
+  bookingId       String          @unique @db.ObjectId
+  ReturnVechicle  ReturnVechicle?
+}
+
+model ReturnVechicle {
+  id                 String       @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  odoMeterReading    Float
+  adjustmentNote     String?
+  demagesImages      Json[]
+  demagesAdjustments Json[]
+  receipt            Json[]
+  fuelCapacity       FuelCapacity
+  bookingStartDate   DateTime
+  bookingEndDate     DateTime
+  returnedDate       DateTime
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  IssueVechicle   IssueVechicle @relation(fields: [issueVechicleId], references: [id])
+  issueVechicleId String        @unique @db.ObjectId
+}
+
+model VechicleIssueReturnCharges {
+  id                              String   @id @default(auto()) @map("_id") @db.ObjectId
+  perDayExtraCharge               Float
+  clearanceCharges                Float?
+  millageLimit                    Float
+  perKmMillageLimitCharges        Float
+  millageLimitCrossed             Float?
+  perKmMillageLimitCrossedCharges Float?
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @updatedAt
+}
+
+enum FuelCapacity {
+  FULL
+  HALF
+  QUARTER
+  HALF_QUARTER
+}
+
+enum ApprovedStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model Donate {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  email       String
+  phoneNumber String
+  amount      Float
+  createdAt   DateTime @default(now())
+}
+
+model CommunityMember {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  designation String
+  picture     String
+  createdAt   DateTime @default(now())
+}
+
+model Slider {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String?
+  sequence    Float
+  description String?
+  picture     String
+  createdAt   DateTime @default(now())
+}
+
+model Advertisement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  page        String
+  description String?
+  picture     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CertificationWorkshop {
+  id          String                    @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  picture     String
+  date        DateTime
+  type        CertificationWorkshopTpye
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+}
+
+enum CertificationWorkshopTpye {
+  Workshop
+  Certification
+  Training
+}
+
+model EmailSubscription {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  createdAt DateTime @default(now())
+}
+
+//Asset
+
+model Asset {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  image           String
+  name            String
+  description     String
+  dailyRent       Float
+  securityDeposit Float
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  isAvailable     Boolean        @default(true)
+  assetBooking    AssetBooking[]
+}
+
+model AssetBooking {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  startDate   DateTime
+  endDate     DateTime
+  bookingDate DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  asset                Asset              @relation(fields: [assetId], references: [id])
+  assetId              String             @db.ObjectId
+  assetBookingBundle   AssetBookingBundle @relation(fields: [assetBookingBundleId], references: [id])
+  assetBookingBundleId String             @unique @db.ObjectId
+}
+
+model AssetBookingBundle {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String?
+  lastName    String?
+  phoneNumber String?
+  email       String?
+  address     String?
+
+  amountCharged   Float
+  bookingReason   String?
+  isAcceptedTerms Boolean?
+  paymentStatus   PaymentStatus  @default(PENDING)
+  approvedStatus  ApprovedStatus @default(PENDING)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  user            User           @relation(fields: [userId], references: [id])
+  userId          String         @unique @db.ObjectId
+  assetBookings   AssetBooking[]
+  issueAsset      IssueAsset?
+}
+
+model IssueAsset {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  images      Json[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  bundle      AssetBookingBundle @relation(fields: [bundleId], references: [id])
+  bundleId    String             @unique @db.ObjectId
+  returnAsset ReturnAsset?
+}
+
+model ReturnAsset {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  adjustmentNote     String?
+  demagesImages      Json[]
+  demagesAdjustments Json[]
+  receipt            Json[]
+
+  returnedDate DateTime
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  issueAsset   IssueAsset @relation(fields: [issueAssetId], references: [id])
+  issueAssetId String     @unique @db.ObjectId
+}
+
+model EmailVerification {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  email          String
+  code           String
+  isEmailVerfied Boolean @default(false)
 }
 
 // model Post {
@@ -159,3 +437,11 @@ model Plan {
 //   name  String?
 //   posts Post[]
 // }
+// pickupdate:String,
+//       dropoffdate:String,
+//       pickuploc:String,
+//       dropoffloc:String,
+//       price:Number,
+//       carid:String,
+//       email:String,
+//       driverinfo:Object
