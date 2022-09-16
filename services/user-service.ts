@@ -1,14 +1,16 @@
 import * as bcrypt from "bcrypt";
 import _ from "lodash";
-import { UserRole } from "../types/enums";
+// import { UserRole } from "../types/enums";
 import { prisma } from "../utils/db";
 import utility from "../utils/utility";
 import successAndErrors from "../utils/successAndErrors";
-import { User, Profile } from "../types/interfaces";
 import appConfig from "../config/app-config";
 const authConfig = appConfig.authConfig;
 import jwt from "jsonwebtoken";
+import { User as PrismaUser, UserRole } from '@prisma/client';
+import moment from "moment";
 
+const randomString = (length: number) => [...Array(length)].map(() => (~~(Math.random() * 36)).toString(36)).join('');
 
 const createSuperAdminUser = async () => {
     const adminUser = {
@@ -26,25 +28,49 @@ const hashPassword = (password: string) => {
     return bcrypt.hashSync(password, salt);
 };
 
+const sendEmailVerification = async (email: string) => {
+    const result = await prisma.emailVerification.findFirst({
+        where: {
+            email: email
+        }
+    });
+    if (_.isEmpty(result) || _.isNull(result)) {
+        return await prisma.emailVerification.create({
+            data: {
+                email: email,
+                code: randomString(8)
+            }
+        })
+    } else {
+        return await prisma.emailVerification.update({
+            where: {
+                id: result?.id
+            },
+            data: {
+                code: randomString(8)
+            }
+        })
+    };
+};
+
 const createUser = async (user: any) => {
 
-    let userClone: any = _.clone(utility.pickOnlyInterestedFields(user, ["password", "email", "userRole", "isAcceptedTerms"]));
+    let userClone: any = _.clone(utility.pickOnlyInterestedFields(user, ["password", "email", "userRole", "isAcceptedTerms", "isEmailVerfied"]));
     let profileClone = _.clone(user?.profile);
 
-    console.log("profileClone ", profileClone, "userClone = ", userClone);
-
-
     if (!utility.validateEmail(userClone?.email)) {
-        return successAndErrors.returnErrorValueNotFound("email");
+        throw successAndErrors.returnErrorValueNotFound("email");
     };
 
     if (utility.checkValueIsEmptyOrUndefined(user?.password)) {
-        return successAndErrors.returnErrorValueNotFound("password");
+        throw successAndErrors.returnErrorValueNotFound("password");
     }
 
     if (utility.checkValueIsEmptyOrUndefined(user?.userRole)) {
-        return successAndErrors.returnErrorValueNotFound("user Type or Role ");
-    };
+        throw successAndErrors.returnErrorValueNotFound("User Type or Role ");
+    } else if (!(user?.userRole == UserRole.COMMUNITY || user?.userRole == UserRole.FINANCIAL || user?.userRole == UserRole.VOLUNTEER)) {
+        throw successAndErrors.returnErrorValueNotFound("User Role ");
+    }
 
     userClone.email = utility.formatEmail(user?.email);
     if (await checkUserEmailAlreadyExistOrNot(user?.email)) {
@@ -179,6 +205,110 @@ const generateToken = (user: any) => {
     });
     return token;
 };
+const changePassword = async (user: PrismaUser, body: any) => {
+    try {
+        const { oldPassword, newPassword } = body;
+        if (bcrypt.compareSync(oldPassword, user?.password)) {
+            const newHashPassword = hashPassword(newPassword);
+            return await prisma.user.update({
+                data: {
+                    password: newHashPassword
+                },
+                where: {
+                    id: user?.id
+                }
+            });
+        } else {
+            throw successAndErrors.addFailure("Old password is not correct");
+        }
+    } catch (error) {
+        throw successAndErrors.addFailure("Old password is not correct");
+    }
+}
+
+const emailVerification = async (email: string, code: string) => {
+    try {
+        const result = await prisma.emailVerification.findFirst({
+            where: {
+                email: email
+            }
+        });
+        if (!_.isEmpty(result) && !_.isNull(result)) {
+            if (result.code != code) {
+                throw successAndErrors.addFailure("Verification code is not correct or email!");
+            } else {
+                await prisma.emailVerification.update({
+                    where: {
+                        id: result?.id
+                    },
+                    data: {
+                        isEmailVerfied: true
+                    }
+                })
+            }
+        } else {
+            throw successAndErrors.addFailure("Verification code is not correct or email!");
+        }
+
+    } catch (error) {
+        throw successAndErrors.addFailure("Verification code is not correct or email!");
+    }
+}
+const pickUpUpdateProfileFields = (body: any) => {
+
+    return _.pick(body, ["firstName", "lastName", "phoneNumber", "addressLine1", "addressLine2", "city", "state", "zipCode", "country",
+        "nationality", "profession", "spouseName", "spouseEmailAddress", "numberOfChildren", "childernAges", "studyingCourse",
+        "uniCollegeName", "dateofArrival", "bio", "whyJoinAsExecutiveMember", "howWouldYoulikeToServeAsPassaExecutiveMember",
+        "whatCapacityDoYouWantToServeTheCommunity"])
+};
+
+const updateProfile = async (user: any, body: any) => {
+    try {
+        if(body?.dateofArrival){
+            const onlyDate = utility.setStartDayTimeToDate(body?.dateofArrival);
+            body.dateofArrival =  utility.covertDateToISOString(onlyDate);
+        }
+        
+
+        const profile = user?.profile;
+        if (!_.isEmpty(profile) && !_.isEmpty(profile?.id)) {
+            return await prisma.profile.update({
+                data: { ...body },
+                where: {
+                    id: profile?.id
+                }
+            });
+        } else {
+            throw successAndErrors.updateFailure("User profile is not updated");
+        }
+    } catch (error) {
+        throw successAndErrors.updateFailure("User profile is not updated");
+    }
+}
+
+const getAllUsers = async (query: any) => {
+    try {
+        const pagination = utility.getSkipAndTakeFromQuery(query);
+        const users = await prisma.user.findMany({
+            skip: pagination?.skip,
+            take: pagination?.take,
+            where: {
+                userRole: { in: [UserRole.COMMUNITY, UserRole.VOLUNTEER, UserRole.FINANCIAL] }
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
+            include: {
+                profile: true
+            },
+        });
+        return users;
+    } catch (error) {
+        throw successAndErrors.getFailure("Something went wrong, please try again");
+    }
+}
+
+
 // let checkUserNameAlreadyExistOrNot = async (userName) => {
 //     try {
 //         let findUserWithUserName = await User.find({ username: userName });
@@ -200,5 +330,11 @@ export {
     createSuperAdminUser,
     createUser,
     validateUserWithEmailAndPassword,
-    generateToken
+    generateToken,
+    changePassword,
+    getAllUsers,
+    updateProfile,
+    emailVerification,
+    sendEmailVerification,
+    pickUpUpdateProfileFields
 }

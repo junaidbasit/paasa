@@ -1,0 +1,3015 @@
+{
+	"info": {
+		"_postman_id": "07ce2792-6e07-4fe6-846c-bd1c00161f3b",
+		"name": "Passa",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13490476"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"rimaka9670@vasqa.com\",\n    \"password\": \"abcd@1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/login",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin-Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"superAdmin@gmail.com\",\n    \"password\": \"superAdmin@123\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/login",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"riyoci8436@yasiok.com\",\n    \"password\": \"password@123\",\n    \"isAcceptedTerms\": true,\n    \"userRole\": \"COMMUNITY\",\n    \"profile\": {\n        \"firstName\": \"Dev\",\n        \"lastName\": \"World\",\n        \"phoneNumber\": \"(07)53660692\",\n        \"addressLine1\": \"84 McDowall Street\",\n        \"addressLine2\": \"84 McDowall Street 2\",\n        \"city\": \"Forest Glen\",\n        \"state\": \"Queensland\",\n        \"zipCode\": \"4556\",\n        \"country\": \"Australia\",\n        \"nationality\": \"Australia\",\n        \"profession\": \"Developer\",\n        //Family with Children If user select this plan\n        \"spouseName\": \"Jam\",\n        \"spouseEmailAddress\": \"Jam@gmail.com\",\n        \"numberOfChildren\": 2,\n        \"childernAges\": [\n            {\n                \"age\": \"12\"\n            },\n            {\n                \"age\": \"10\"\n            }\n        ],\n        //Single/Student (above 18 years)\n        \"studyingCourse\": \"BSCS\",\n        \"uniCollegeName\": \"MNSUA\",\n        //Executive Member\n        \"whyJoinAsExecutiveMember\": \"String\",\n        \"howWouldYoulikeToServeAsPassaExecutiveMember\": \"String\",\n        \"whatInspiresYouToServeCommunity\": \"String\",\n        //Volunteer Member\n        \"whatCapacityDoYouWantToServeTheCommunity\": \"String\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/register",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZWYiLCJwcm9maWxlSWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZjAiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY2MTIyOTQ2NCwiZXhwIjoxNjYxMzE1ODY0fQ.CKJyrzlNDgyYW5GgaeP48gkiUL50_R8X09qD1BKkmFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/user/me",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/user/allUsers?limit=10&page=1",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"allUsers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiI2MjdhOWQ3ZmViNDdhMjdlYzg4YzIzMjUiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY1MjUxMjMzMSwiZXhwIjoxNjUyNTk4NzMxfQ.FnRvuNchNEA5uKHekyVii9edcOzvIm--OsHHzrEObjA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"password@123\",\n    \"newPassword\": \"password@123\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/changePassword",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Email Verification",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZWYiLCJwcm9maWxlSWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZjAiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY2MTIyOTQ2NCwiZXhwIjoxNjYxMzE1ODY0fQ.CKJyrzlNDgyYW5GgaeP48gkiUL50_R8X09qD1BKkmFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"rggsor1a\",\n    \"email\": \"rimaka9670@vasqa.com\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/emailVerification",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"emailVerification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Email Verification",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZWYiLCJwcm9maWxlSWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZjAiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY2MTIyOTQ2NCwiZXhwIjoxNjYxMzE1ODY0fQ.CKJyrzlNDgyYW5GgaeP48gkiUL50_R8X09qD1BKkmFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"rimaka9670@vasqa.com\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/sendEmailVerification",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"sendEmailVerification"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send contact us email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZWYiLCJwcm9maWxlSWQiOiI2MzA0NTk5N2NkMTdjMDk1NDU1N2VhZjAiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY2MTIyOTQ2NCwiZXhwIjoxNjYxMzE1ODY0fQ.CKJyrzlNDgyYW5GgaeP48gkiUL50_R8X09qD1BKkmFU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"m.umair1223@gmail.com\",\n    \"name\": \"junaid\",\n    \"message\": \"please update your site\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/contactus",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"contactus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MmRjM2JlYTJjNDZkYTdiZTM4YmRhYmMiLCJwcm9maWxlSWQiOiI2MmRjM2JlYTJjNDZkYTdiZTM4YmRhYmQiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY1ODYwMDQyOCwiZXhwIjoxNjU4Njg2ODI4fQ.9_9Jd2tK-VVBhddD8qQtdZpiRBnGRoGYCmqeQ0OTpwg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"spouseName\": \"Farhan\",\n    \"spouseEmailAddress\": \"farhanemail@gmail.com\",\n    \"numberOfChildren\": 5,\n    \"studyingCourse\": \"Computer Sciennce\",\n    \"uniCollegeName\": \"MNSUA\",\n    \"bio\": \"Hello Biography\"\n}"
+						},
+						"url": {
+							"raw": "{{passaURL}}/user/updateProfile",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"user",
+								"updateProfile"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "Add category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Toyota\",\n    \"description\": \"Toyota\",\n    \"isActive\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/category/",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/category/",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/category/627f971941088f9dd64c234b",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								"627f971941088f9dd64c234b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Honda Desp\",\n    \"isActive\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/category/627f971941088f9dd64c234b",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								"627f971941088f9dd64c234b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/category/625d8f58cf270e1fb3ba6858",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								"625d8f58cf270e1fb3ba6858"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Vehicles By Category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Honda\",\n    \"description\": \"Honda\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/category/listVehiclesByCategory/627f971941088f9dd64c234b",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								"listVehiclesByCategory",
+								"627f971941088f9dd64c234b"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Community-Member",
+			"item": [
+				{
+					"name": "Add Community-Member",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Imran Khan\",\n    \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n    \"designation\":\"Chairman\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/communityMember/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"communityMember",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Community Members",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/communityMember/list",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"communityMember",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/communityMember/62e2cf8b23b5be09a158d7c9",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"communityMember",
+								"62e2cf8b23b5be09a158d7c9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"Imran Khan\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/631387ec665ed06aceef5fb3",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"631387ec665ed06aceef5fb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/communityMember/631387ec665ed06aceef5fb3",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"communityMember",
+								"631387ec665ed06aceef5fb3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Email Subscription",
+			"item": [
+				{
+					"name": "Add Email Subscription",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"testemail\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Email Subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/list",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/631387ec665ed06aceef5fb3",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"631387ec665ed06aceef5fb3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Imran Khan\",\n        \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n        \"designation\": \"Chairman\",\n        \"picture\": \"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/62e2cf8b23b5be09a158d7c9",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"62e2cf8b23b5be09a158d7c9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/emailSubscription/631387ec665ed06aceef5fb3",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"emailSubscription",
+								"631387ec665ed06aceef5fb3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Certification Workshops",
+			"item": [
+				{
+					"name": "Add Workshops",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Imran Khan\",\n    \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\",\n    \"date\":\"15-09-2022\",\n    \"type\":\"Workshop\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Certificate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Imran Khan\",\n    \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\",\n    \"date\":\"15-09-2022\",\n    \"type\":\"Certification\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Training",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Imran Khan\",\n    \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\",\n    \"date\":\"15-09-2022\",\n    \"type\":\"Training\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Certification Workshops",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/list",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/62f281e26247dbe7f8f7e8dd",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"62f281e26247dbe7f8f7e8dd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Imran Khan\",\n        \"description\": \"Imran Khan takes out the time from his busy schedule to share his insights, particularly with the youth.\",\n        \"designation\": \"Chairman\",\n        \"picture\": \"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/62e2cf8b23b5be09a158d7c9",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"62e2cf8b23b5be09a158d7c9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/certificationworkshops/62e2cecc23b5be09a158d7c8",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"certificationworkshops",
+								"62e2cecc23b5be09a158d7c8"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Slider",
+			"item": [
+				{
+					"name": "Add Slider",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Company Profile\",\n    \"sequence\": 1,\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/slider/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"slider",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Sliders",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/slider/list",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"slider",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/slider/62e55596d6fb1fa37393dac5",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"slider",
+								"62e55596d6fb1fa37393dac5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Company Profile\",\n    \"sequence\": 1,\n    \"picture\": \"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/slider/62e55596d6fb1fa37393dac5",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"slider",
+								"62e55596d6fb1fa37393dac5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/slider/62e5556fd6fb1fa37393dac4",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"slider",
+								"62e5556fd6fb1fa37393dac4"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Advertisement",
+			"item": [
+				{
+					"name": "Add Advertisement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": \"AboutPaasa\",\n    \"description\":\"Add from Malik\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/advertisement/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"advertisement",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Advertisement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/advertisement/list",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"advertisement",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Page By Name",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/advertisement/AboutPaasa",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"advertisement",
+								"AboutPaasa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": \"AboutPaasa\",\n    \"description\":\"Add from Malik\",\n    \"picture\":\"https://i.dawn.com/large/2020/12/5fec3217120cc.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/advertisement/62e54a6d3c5a6437e918b873",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"advertisement",
+								"62e54a6d3c5a6437e918b873"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/advertisement/62e54a6d3c5a6437e918b873",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"advertisement",
+								"62e54a6d3c5a6437e918b873"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "plans",
+			"item": [
+				{
+					"name": "Load Plans Into Db",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/plans/loadPlansIntoDb",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"plans",
+								"loadPlansIntoDb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Plans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/plans/",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"plans",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/plans/627f55ea379713ec1a18e0f0",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"plans",
+								"627f55ea379713ec1a18e0f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiI2MjdhOWQ3ZmViNDdhMjdlYzg4YzIzMjUiLCJ1c2VyUm9sZSI6IkNPTU1VTklUWSIsImlhdCI6MTY1MjUxMjMzMSwiZXhwIjoxNjUyNTk4NzMxfQ.FnRvuNchNEA5uKHekyVii9edcOzvIm--OsHHzrEObjA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Single and student\",\n    \"description\": \"Single and student\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/plans/627f55ea379713ec1a18e0f0",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"plans",
+								"627f55ea379713ec1a18e0f0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Plan Activation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"planId\": \"627f55ea379713ec1a18e0f0\",\n    \"startDate\": \"12-06-2022\",\n    \"endDate\": \"30-06-2022\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/plans/userPlanActivation",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"plans",
+								"userPlanActivation"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "vehicle",
+			"item": [
+				{
+					"name": "Add vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Land Cruiser Prado\",\n    \"description\": \"Land Cruiser Prado\",\n    \"seatingCapacity\": 5,\n    \"model\": \"2018\",\n    \"plate\": \"AEK-4641\",\n    \"categoryId\": \"62a5f3ae39a3333bb88b036c\",\n    \"dailyRent\": 200,\n    \"securityDeposit\": 30,\n    \"isAvailable\": true,\n    \"image\":\"https://imgd.aeplcdn.com/0x0/cw/ec/10219/Toyota-Land-Cruiser-Prado-Exterior-127835.jpg?wm=0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicle",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All vehicle",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicle/",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All vehicle Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicle/",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicle/627f9934b5fc3ee384ccac42",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"627f9934b5fc3ee384ccac42"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Honda City 2010 A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicle/625d99eb7f7c564e823ccdef",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"625d99eb7f7c564e823ccdef"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/category/625d8f83cf270e1fb3ba6859",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"category",
+								"625d8f83cf270e1fb3ba6859"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Vehicle Discount",
+			"item": [
+				{
+					"name": "Add vehicle Discount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdmZDJmNjFhYjdlZWRiYmNjZjk0OTAiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjUyNTQ0MzE0LCJleHAiOjE2NTI2MzA3MTR9.VqYmmTW2oo-BaL0vwbWhBXJy5_2_uQOjJ0SRmkKxsbc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"discount\": 15,\n    \"userRole\": \"VOLUNTEER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicle/discount",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"discount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All vehicle Discounts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdmZDJmNjFhYjdlZWRiYmNjZjk0OTAiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjUyNTQ0MzE0LCJleHAiOjE2NTI2MzA3MTR9.VqYmmTW2oo-BaL0vwbWhBXJy5_2_uQOjJ0SRmkKxsbc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicle/discounts",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdmZDJmNjFhYjdlZWRiYmNjZjk0OTAiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjUyNTQ0MzE0LCJleHAiOjE2NTI2MzA3MTR9.VqYmmTW2oo-BaL0vwbWhBXJy5_2_uQOjJ0SRmkKxsbc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicle/discount/627fd45571ac758cfec13f8e",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"discount",
+								"627fd45571ac758cfec13f8e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdmZDJmNjFhYjdlZWRiYmNjZjk0OTAiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjUyNTQ0MzE0LCJleHAiOjE2NTI2MzA3MTR9.VqYmmTW2oo-BaL0vwbWhBXJy5_2_uQOjJ0SRmkKxsbc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"discount\": 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicle/discount/627fd45571ac758cfec13f8e",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicle",
+								"discount",
+								"627fd45571ac758cfec13f8e"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Vehicle Booking",
+			"item": [
+				{
+					"name": "Calculate Rent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"startDate\": \"29-09-2022\",\n    \"endDate\": \"30-09-2022\",\n    \"vehicleId\": \"6310ae2372b8c88e3495bd1f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/calculateRent",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"calculateRent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/list?limit=10&page=1",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"list"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current User Bookings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiI2MjdhOWQ3ZmViNDdhMjdlYzg4YzIzMjUiLCJ1c2VyUm9sZSI6IkZJTkFOQ0lBTCIsImlhdCI6MTY1NTY3MDc2NSwiZXhwIjoxNjU1NzU3MTY1fQ.iOppWMPn4FZjr1uKrv7VqRrRYRFZwP5FcJEgj4MM8Cw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/me?limit=10&page=1",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"me"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/62ffbd988a7406ba7fd1dcc1",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"62ffbd988a7406ba7fd1dcc1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"approvedStatus\": \"APPROVED\",\n    \"paymentStatus\": \"PENDING\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/62811bc8e1afc7b73713be9b",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"62811bc8e1afc7b73713be9b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add-Booking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicleId\": \"6280dbc5d9de483522bf6523\",\n    \"startDate\": \"11-08-2022\",\n    \"endDate\": \"12-08-2022\",\n    \"phoneNumber\": \"3476434\",\n    \"email\": \"fou@gmail.com\",\n    \"address\": \"erer\",\n    \"bookingReason\": \"one\",\n    \"emergencyPhoneNumber\": \"3434343\",\n    \"driverLicenseNumber\": \"erererer\",\n    \"isAcceptedTerms\": true,\n    \"firstName\": \"Fou\",\n    \"lastName\": \"Jun\",\n    \"nameOfDriver\": \"FouJun\",\n    \"amountCharged\": 210\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/addBooking",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"addBooking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/vehicleBooking/62a4e9d9ad880cc009dcc87f",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"vehicleBooking",
+								"62a4e9d9ad880cc009dcc87f"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Vehicle Issue Return",
+			"item": [
+				{
+					"name": "Vehicile Issue",
+					"item": [
+						{
+							"name": "Add Vehicle Issue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookingId\": \"62a5f1b6ebe7a39c1b9f1983\",\n    \"name\": \"Mujahid\",\n    \"odoMeterReading\": 12364.54,\n    \"description\": \"To be Booked\",\n    \"images\": [\n        {\n            \"source\": \"TopRoof\",\n            \"url\": \"https://i.picsum.photos/id/1036/500/500.jpg?hmac=aiblEmFfvoc7eWaaaiiw4a6RYXo1S4vkcF5KRfBhzKM\"\n        },\n        {\n            \"source\": \"Gril\",\n            \"url\": \"https://i.picsum.photos/id/383/500/600.jpg?hmac=Y2_vtfP8vHISUQzpVfCgqbC2ZEPAROigalZ3rc6I89w\"\n        }\n    ],\n    \"fuelCapacity\": \"HALF\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createIssue",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createIssue"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Vehicle Issues",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueList?limit=10&page=1",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueList"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id Issue",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issue/62af8394edc10899d14b7021",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issue",
+										"62af8394edc10899d14b7021"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Vehicile Return",
+					"item": [
+						{
+							"name": "Add Vehicle Return",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Mujahid\",\n    \"odoMeterReading\": 546.36,\n    \"adjustmentNote\": \"Please adjustments\",\n    \"demagesImages\": [\n        {\n            \"source\": \"TopRoof\",\n            \"url\": \"https://i.picsum.photos/id/1036/500/500.jpg?hmac=aiblEmFfvoc7eWaaaiiw4a6RYXo1S4vkcF5KRfBhzKM\"\n        },\n        {\n            \"source\": \"Gril\",\n            \"url\": \"https://i.picsum.photos/id/383/500/600.jpg?hmac=Y2_vtfP8vHISUQzpVfCgqbC2ZEPAROigalZ3rc6I89w\"\n        }\n    ],\n    \"demagesAdjustments\": [\n        {\n            \"charges\": 123.32,\n            \"adjustment\": 100,\n            \"source\": \"ExtraDays\"\n        }\n    ],\n    \"fuelCapacity\": \"HALF\",\n    \"bookingStartDate\": \"29-05-2022\",\n    \"bookingEndDate\": \"30-05-2022\",\n    \"returnedDate\": \"30-05-2022\",\n    \"issueVechicleId\": \"6294f28b753fa73e0f7907fe\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createReturn",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createReturn"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id Return",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/return/62950118d4c51b444f9e8726",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"return",
+										"62950118d4c51b444f9e8726"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Vehicle Returns",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/returnList?limit=10&page=1",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"returnList"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Vehicile Issue Return Charges",
+					"item": [
+						{
+							"name": "Create Issue Return Charges Copy 2",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzBlNTA3NTQzODhjMTdiYmI5ZWFiZGIiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IlNVUEVSX0FETUlOIiwiaWF0IjoxNjYxODgyNzExLCJleHAiOjE2NjE5NjkxMTF9.bRl56mW7p8Mq330v7fyQU8Te08rLZOVe85JuuNhdd1E",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"perDayExtraCharge\": 15,\n    \"clearanceCharges\": 50,\n    \"millageLimit\": 1000,\n    \"perKmMillageLimitCharges\": 5,\n    \"millageLimitCrossed\": 3000,\n    \"perKmMillageLimitCrossedCharges\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/createIssueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"createIssueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1-Calculate Return Charges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vehicleIssueId\": \"62a76e1947531262bbcf9fdd\",\n    \"currentOdoReading\": 13500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/calculateReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"calculateReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Issue Return Charges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Issue Return Charges Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"perDayExtraCharge\": 15,\n    \"clearanceCharges\": 50,\n    \"millageLimit\": 1000,\n    \"perKmMillageLimitCharges\": 5,\n    \"millageLimitCrossed\": 3000,\n    \"perKmMillageLimitCrossedCharges\": 10\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/issueReturnCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"issueReturnCharges"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2-Calulate Final Chanrges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"vehicleIssueId\": \"62af8394edc10899d14b7021\",\n    \"adjustments\": [\n        {\n            \"charges\": 100,\n            \"adjustment\": 100,\n            \"source\": \"Extra Days\"\n        },\n        {\n            \"charges\": 50,\n            \"adjustment\": 25,\n            \"source\": \"Extra Millage\"\n        },\n        {\n            \"charges\": 60,\n            \"adjustment\": 50,\n            \"source\": \"Clearing Issue\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/vehicleIssueReturn/calulateFinalChanrges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"vehicleIssueReturn",
+										"calulateFinalChanrges"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "1- Add Payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IkZJTkFOQ0lBTCIsImlhdCI6MTY1ODc3NTE2MywiZXhwIjoxNjU4ODYxNTYzfQ.aOg1SR5VfuiEzTaIizyrbmtgZwiMfvbaLy-AkY5bd_s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2,\n    \"description\":\"family plan purchased\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/payment/createPayment",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"payment",
+								"createPayment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1- Add Donate Payment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IkZJTkFOQ0lBTCIsImlhdCI6MTY1ODc3NTE2MywiZXhwIjoxNjU4ODYxNTYzfQ.aOg1SR5VfuiEzTaIizyrbmtgZwiMfvbaLy-AkY5bd_s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 2,\n    \"email\": \"junaidbasit46@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/payment/createDonatePayment",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"payment",
+								"createDonatePayment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Donation",
+			"item": [
+				{
+					"name": "Add Donation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IkZJTkFOQ0lBTCIsImlhdCI6MTY1ODc3NTE2MywiZXhwIjoxNjU4ODYxNTYzfQ.aOg1SR5VfuiEzTaIizyrbmtgZwiMfvbaLy-AkY5bd_s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Junaid\",\n    \"description\": \"Donation\",\n    \"email\": \"junaidbasit46@gmail.com\",\n    \"phoneNumber\": \"923058374641\",\n    \"amount\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{passaURL}}/donation/add",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"donation",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Donation List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjdhOWQ3ZWViNDdhMjdlYzg4YzIzMjQiLCJwcm9maWxlSWQiOiIiLCJ1c2VyUm9sZSI6IkZJTkFOQ0lBTCIsImlhdCI6MTY1ODc3NTE2MywiZXhwIjoxNjU4ODYxNTYzfQ.aOg1SR5VfuiEzTaIizyrbmtgZwiMfvbaLy-AkY5bd_s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{passaURL}}/donation/list?page=1&limit=10",
+							"host": [
+								"{{passaURL}}"
+							],
+							"path": [
+								"donation",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Status List",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/allStatus",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"allStatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Roles",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{passaURL}}/system/userRoles",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"system",
+						"userRoles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Images",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "images",
+							"type": "file",
+							"src": "/home/junaid-dev/Pictures/Screenshot from 2022-04-04 19-17-54.png"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": "/home/junaid-dev/Pictures/Screenshot from 2022-02-27 22-45-33.png"
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{passaURL}}/vehicleIssueReturn/uploadImages",
+					"host": [
+						"{{passaURL}}"
+					],
+					"path": [
+						"vehicleIssueReturn",
+						"uploadImages"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

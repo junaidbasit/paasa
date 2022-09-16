@@ -111,5 +111,12 @@ export default {
             message: `${entity} updated successfully`
         });
     },
-
+    throwCustomMessage(errorMessage: string) {
+        throw { customMessage: errorMessage }
+    },
+    failWithCustomMessage(message: string) {
+        return extend({}, this.BadRequest, {
+            message: `${message}, Please try again`
+        })
+    }
 }

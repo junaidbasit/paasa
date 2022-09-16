@@ -44,7 +44,8 @@ const authenticateWithToken = async (jwtPayload: any, done: VerifiedCallback) =>
             id: { equals: userId }
         },
         include: {
-            profile: true
+            profile: true,
+            userPlan: true
         }
     });
     if (!_.isEmpty(user)) {

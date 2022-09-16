@@ -39,3 +39,12 @@ export type Profile = {
   userId: number
   // profileRole: ProfileRole
 }
+
+export interface PaginationInput {
+  page: string
+  limit: string
+}
+export interface Pagination {
+  skip: number,
+  take: number,
+}

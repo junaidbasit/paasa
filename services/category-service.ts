@@ -1,6 +1,7 @@
 import { prisma } from "../utils/db";
 import successAndErrors from "../utils/successAndErrors";
 // import { Vehicle } from '@prisma/client';
+import _ from "lodash";
 
 const addCategory = async (body: any) => {
     try {
@@ -18,9 +19,6 @@ const addCategory = async (body: any) => {
 const listCategories = async () => {
     try {
         return await prisma.category.findMany({
-            where: {
-                isActive: true
-            },
             include: {
                 vehicles: true
             },
@@ -58,11 +56,34 @@ const updateCategory = async (id: string, body: any) => {
 }
 const deleteCategory = async (id: string) => {
     try {
-        return await prisma.category.delete({
-            where: { id: id }
+        const findVechiles = await prisma.category.findFirst({
+            where: {
+                id: id
+            },
+            include: {
+                vehicles: true
+            }
+        });
+        if (!_.isEmpty(findVechiles) && _.isEmpty(findVechiles?.vehicles)) {
+            return await prisma.category.delete({
+                where: { id: id }
+            })
+        } else {
+            successAndErrors.throwCustomMessage("This category contain vehicles, Please delete vehicles before to delete Category, Category")
+        }
+
+    } catch (error: any) {
+        throw successAndErrors.deleteFailure(error?.customMessage ?? 'Category')
+    }
+}
+
+const listVehicleByCategory = async (id: string) => {
+    try {
+        return await prisma.vehicle.findMany({
+            where: { categoryId: id }
         })
     } catch (error) {
-        throw successAndErrors.deleteFailure('Category')
+        throw successAndErrors.getFailure('Catefories')
     }
 }
 
@@ -72,5 +93,6 @@ export {
     updateCategory,
     getCategory,
     listCategories,
-    addCategory
+    addCategory,
+    listVehicleByCategory
 }
