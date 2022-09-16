@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "prisma generate --schema=./prisma/schema.prisma && ts-node index.ts",
     "build": "prisma generate --schema=./prisma/schema.prisma",
     "start:dev": "npm run prisma:generate && npm run start",
     "prisma:seed": "prisma db seed",
