@@ -14,15 +14,27 @@ const apiPort: string | number = process.env.PORT || 4000;
 //   process.env.APP_API_URL || `http://localhost:${apiPort}`;
 
 // initialiseSupertokensAuth(websiteDomain, apiDomain);
+// const allowedOrigins = ['http://localhost:3000'];
+
+// const options: cors.CorsOptions = {
+//   origin: allowedOrigins
+// };
+
+// Then pass these options to cors:
 
 const app: Application = express();
-app.use((req, res, next) => { next(); }, cors({ maxAge: 84600 }));
+// app.use((req, res, next) => { next(); }, cors({ maxAge: 84600 }));
+app.use(cors());
 
 app.use(express.json());
 // app.use(middleware());
 
 // TODO: API Routes
 app.use("/api", apiRoutes);
+app.use("/", (req: Request, res: Response, next: NextFunction) => {
+  res.status(200).send("Hello Passa")
+});
+
 
 // app.use(errorHandler());
 
