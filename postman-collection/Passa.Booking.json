@@ -24,12 +24,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{passaURL}}/user/login",
+							"raw": "user/login",
 							"host": [
-								"{{passaURL}}"
+								"user"
 							],
 							"path": [
-								"user",
 								"login"
 							]
 						}
@@ -3311,12 +3310,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{passaURL}}/vehicleBooking/62811bc8e1afc7b73713be9b",
+									"raw": "{{passaURL}}/assetMangement/assetBooking/62811bc8e1afc7b73713be9b",
 									"host": [
 										"{{passaURL}}"
 									],
 									"path": [
-										"vehicleBooking",
+										"assetMangement",
+										"assetBooking",
 										"62811bc8e1afc7b73713be9b"
 									]
 								}
@@ -3402,7 +3402,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{passaURL}}/assetMangement/assetIssue/issueList?limit=10&page=1",
+									"raw": "{{passaURL}}/assetMangement/assetIssue/issueList",
 									"host": [
 										"{{passaURL}}"
 									],
@@ -3414,11 +3414,13 @@
 									"query": [
 										{
 											"key": "limit",
-											"value": "10"
+											"value": "10",
+											"disabled": true
 										},
 										{
 											"key": "page",
-											"value": "1"
+											"value": "1",
+											"disabled": true
 										}
 									]
 								}
@@ -3474,6 +3476,49 @@
 									""
 								]
 							}
+						}
+					]
+				},
+				{
+					"name": "Asset-Return",
+					"item": [
+						{
+							"name": "Calulate Charges",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"assetIssueId\": \"6321e2edf34c31c17e25e21c\",\n    \"returnDate\":\"11-09-2022\",\n    \"adjustments\": [\n        {\n            \"charges\": 100,\n            \"adjustment\": 100,\n            \"source\": \"Extra Days\"\n        },\n        {\n            \"charges\": 60,\n            \"adjustment\": 50,\n            \"source\": \"Clearing Issue\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{passaURL}}/assetMangement/assetReturn/calulateCharges",
+									"host": [
+										"{{passaURL}}"
+									],
+									"path": [
+										"assetMangement",
+										"assetReturn",
+										"calulateCharges"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
