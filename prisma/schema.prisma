@@ -366,6 +366,7 @@ model AssetBookingBundle {
   address     String?
 
   amountCharged   Float
+  securityCharged Float?
   bookingReason   String?
   isAcceptedTerms Boolean?
   paymentStatus   PaymentStatus  @default(PENDING)

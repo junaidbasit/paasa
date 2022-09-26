@@ -88,10 +88,13 @@ const checkBookingAvaiable = async (body: any, user: any) => {
     const foundDates = _.intersection(datesWantToBook, datesAlreadybookedFlatten);
     if (_.isEmpty(alreadyBooking) || _.isEmpty(foundDates)) {
         if (UserRole.SUPER_ADMIN == user?.userRole) {
-            return 0;
+            return { securityDeposit: 0, totalPriceWithSecurity: 0 };
         } else {
             const result = await addAssetToBundle(body);
-            return result?.totalPriceWithSecurity ?? 0
+            return {
+                totalPriceWithSecurity: result?.totalPriceWithSecurity ?? 0,
+                securityDeposit: result?.securityDeposit ?? 0
+            }
         }
     } else {
         throw successAndErrors.addFailure(`Asset is already booked on ${foundDates.join(', ')}, Booking`);
@@ -102,11 +105,15 @@ const confirmBooking = async (body: any, user: any) => {
     try {
         const { bookings } = body;
         let allBookingsCharge = 0;
+        let securityDepositCharges = 0;
+
         const allBookingsData: any[] = []
 
 
         for (const single of bookings) {
-            allBookingsCharge = allBookingsCharge + await checkBookingAvaiable(single, user);
+            const { securityDeposit, totalPriceWithSecurity } = await checkBookingAvaiable(single, user);
+            securityDepositCharges = securityDepositCharges + securityDeposit;
+            allBookingsCharge = allBookingsCharge + totalPriceWithSecurity;
             const setStartDate = utility.setStartDayTimeToDate(single?.startDate);
             const setEndDate = utility.setEndDayTimeToDate(single?.endDate);
             allBookingsData.push({
@@ -119,12 +126,14 @@ const confirmBooking = async (body: any, user: any) => {
             PaymentStatus.SUCCESS : PaymentStatus.PENDING;
         const bookingStatus = UserRole.SUPER_ADMIN == user?.userRole ?
             ApprovedStatus.APPROVED : ApprovedStatus.PENDING;
-        const updateData: any = _.omit(body, ['bookings']);
+        const updateData: any = _.omit(body, ['bookings', "amountCharged"]);
         return await prisma.assetBookingBundle.create({
             data: {
+                ...updateData,
                 paymentStatus: paymentStatus,
                 approvedStatus: bookingStatus,
-                ...updateData,
+                securityCharged: securityDepositCharges,
+                amountCharged: allBookingsCharge,
                 user: { connect: { id: user?.id } },
                 assetBookings: {
                     createMany: {

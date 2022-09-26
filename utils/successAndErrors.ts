@@ -74,24 +74,24 @@ export default {
 
     addFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: `${entity} WAS NOT added`
+            message: `${entity} not added`
         });
     },
     deleteFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: `${entity}  WAS NOT deleted`
+            message: `${entity}  not deleted`
         });
     },
 
     updateFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: `${entity} WAS NOT updated`
+            message: `${entity} not updated`
         });
     },
 
     getFailure(entity: string = 'Data') {
         return extend({}, this.BadRequest, {
-            message: `${entity} WAS NOT fetched`
+            message: `${entity} not fetched`
         });
     },
     addSuccess(entity: string = 'Data') {
